@@ -1,0 +1,51 @@
+﻿
+<div class="w3-container" id="address-table-container">
+
+    <div id="address-table-template">
+
+        <h1>Direcciones</h1>
+
+        <div header="" class="w3-bar w3-border-top w3-border-left w3-border-right">
+
+        <span data-xbind="innerHTML:title" class="w3-left" style="padding:6px 0 4px 8px;"></span>
+
+        <button type="button" class="w3-button w3-xlarge w3-right fa fa-plus w3-border-left w3-hideu" style="padding: 7px 4px;" title="Insertar" on-click="doAction(new)"></button>
+        <button type="button" class="w3-button w3-xlarge w3-right fa fa-trash w3-border-left w3-hideu" style="padding: 7px 4px;" title="Eliminar" on-click="doAction(delete)"></button>
+        <button type="button" class="w3-button w3-xlarge w3-right fa fa-edit w3-border-left w3-hideu" style="padding: 9px 4px 5px 4px;" title="Editar" on-click="doAction(edit)"></button>
+        <button type="button" on-click="doAction(last)" class="w3-button w3-right w3-border-left" style="padding: 8px;">&#10095;&#10095;</button>
+        <button type="button" on-click="doAction(next)" class="w3-button w3-right w3-border-left" style="padding: 8px;">&#10095;</button>
+        <input on-change="doGoToPage()" data-xbind="value:currentPage" class="w3-right w3-center" style="width: 3em;padding:8px; border:none" />
+        <button type="button" on-click="doAction(previous)" class="w3-button w3-right w3-border-left w3-border-right" style="padding: 8px;">&#10094;</button>
+        <button type="button" on-click="doAction(first)" class="w3-button w3-right w3-border-left" style="padding: 8px;">&#10094;&#10094;</button>
+
+        <div class="w3-right w3-border-left" style="margin:0; padding:0">
+            <input on-change="doSearch()" type="text" class="w3-right" style="padding:8px; border:none" placeholder="Buscar.." /> 
+        </div>
+
+        </div>
+
+        <table class="w3-table-all">
+        <thead>
+            <tr on-click="doSort()">
+            <th class="w3-hover-gray sorteable" style="width:1%;"></th>
+            <th class="w3-hover-gray sorteable">Id</th>
+            <th class="w3-hover-gray sorteable">Dirección</th>
+            <th class="w3-hover-gray sorteable">Provincia</th>
+            <th class="w3-hover-gray sorteable">Población</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-xbind data-xfor="item in visibleItems" id="row-{item.id}">
+            <td data-xbind class="w3-border-right">
+                <input data-xbind="checked:fn.checked(@item)" type="checkbox" on-click="doAction(check-item,{index})" />
+            </td>
+            <td data-xbind on-click="doAction(edit-row,{item.id})">{item.id}</td>
+            <td data-xbind>{item.address.summary}</td>
+            <td data-xbind>{item.address.province}</td>
+            <td data-xbind>{item.address.town}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+</div>

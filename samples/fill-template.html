@@ -1,0 +1,76 @@
+﻿
+<div class="w3-container">
+
+  <h1>FillTemplate</h1>
+
+  <div id="item-container">
+    <div class="w3-card w3-padding" style="margin:8px 0;">
+      <h2 class="w3-gray w3-center" data-xbind>{name}</h2>
+      <div data-xbind="innerHTML:company|toLowerCase"></div>
+      <div data-xbind="innerHTML:email"></div>
+      <div data-xbind="innerHTML:age"></div>
+      <div class="">
+        Friends:
+        <div class="w3-border w3-padding"
+             style="margin:3px 0;"
+             data-xbind data-xfor="friend in friends">
+          <h4 data-xbind>parent : {#.name}</h4>
+          {index} {friend.name} ({friend.id|toFixed,5})<br />
+          Tags:
+          <span data-xbind
+                style="display:inline-block; margin:0 2px; padding:2px; border:solid 1px gray; border-radius:3px;"
+                data-xfor="tag in friend.tags"
+                class="w3-pale-yellow">{tag}</span>
+        </div>
+      </div>
+      <div class="" style="padding:2px;">
+        <div class="">
+          Tags:
+          <span data-xbind
+                style="display:inline-block; margin:0 2px; padding:2px; border:solid 1px gray; border-radius:3px;"
+                data-xfor="tag in tags"
+                class="w3-pale-yellow">{tag}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="list-container">
+
+    <div data-xbind data-xfor="person in this">
+      <div class="w3-card w3-padding" style="margin:8px 0;">
+        <h2 class="w3-gray w3-center" data-xbind>{person.name}</h2>
+        <div data-xbind="innerHTML:person.company|toLowerCase"></div>
+        <div data-xbind="innerHTML:person.email"></div>
+        <div data-xbind="innerHTML:person.age"></div>
+        <div class="">
+          Friends:
+          <div class="w3-border w3-padding"
+               style="margin:3px 0;"
+               data-xbind data-xfor="friend in person.friends">
+            <h4 data-xbind>parent : {#.person.name}</h4>
+            {index} {friend.name} ({friend.id|toFixed,5})<br />
+            Tags:
+            <span data-xbind
+                  style="display:inline-block; margin:0 2px; padding:2px; border:solid 1px gray; border-radius:3px;"
+                  data-xfor="tag in friend.tags"
+                  class="w3-pale-yellow">{tag}</span>
+          </div>
+        </div>
+        <div class="" style="padding:2px;">
+          <div class="">
+            Tags:
+            <span data-xbind
+                  style="display:inline-block; margin:0 2px; padding:2px; border:solid 1px gray; border-radius:3px;"
+                  data-xfor="tag in person.tags"
+                  class="w3-pale-yellow">{tag}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <base href="/">
+  <title>Rcg-js</title>
+
+  <link rel="stylesheet" href="./css/w3.css">
+  <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css>
+
+  <script type="text/javascript" src="./js/rcg-js.js"></script>
+
+  <style type="text/css">
+  </style>
+
+  <script>
+ 
+    var samples = {
+      'list-view'       : './/samples//js//list-view.js',
+      'debounce'        : './/samples//js//debounce.js',
+      'executeTemplate' : './/samples//js//execute-template.js',
+      'fillTemplate'    : './/samples//js//fill-template.js',
+      'merge'           : './/samples//js//merge.js',
+      'declarative'     : './/samples//js//declarative.js'
+    };
+
+    function openSample(name) { rcg.core.include(samples[name], false); }
+    
+    document.addEventListener("DOMContentLoaded", function () {
+      openSample('list-view');
+    });
+
+  </script>
+
+</head>
+<body>
+
+  <div class="w3-bar w3-black">
+    <button class="w3-bar-item w3-button" onclick="openSample('list-view')">ListView</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('debounce')">Debounce</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('executeTemplate')">ExecuteTemplate</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('fillTemplate')">FillTemplate</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('merge')">Merge</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('declarative')">Declarative</button>
+  </div>
+
+  <div id="main-container"></div>
+
+  <div style="display:none;"></div>
+
+</body>
+
+</html>

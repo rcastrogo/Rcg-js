@@ -1,0 +1,27 @@
+﻿
+<div class="w3-container">
+
+  <h1>Merge</h1>
+
+  <div class="w3-example">
+    <h3>Template</h3>
+    <textarea id="txt-template" class="w3-code" style="min-height:200px;width:100%;resize: none">
+<h2>{value.id}</h2>
+
+{value.name|toUpperCase|toLowerCase} {value.age|toFixed,3} <br />
+{fn.toBold(@value.name)} {value.name:fn.toItalic(1,2,3,@value.age|toFixed,8)} <br />
+{value.friends:fn.parseArray(name,#)} <br />
+{rcg.core.join(@value.friends,id,--)} <br />
+{rcg.core.join(@value.tags,.,|)} <br />
+
+    </textarea>
+    <a class="w3-btn w3-black" onclick="rcg.pubsub.publish('template__merge__execute')">Ejecutar</a>
+  </div>
+
+  <div class="w3-example">
+    <h3>Resultado</h3>
+    <div id="merge-container" class="w3-border" style="min-height:200px;">
+    </div>
+  </div>
+
+</div>
