@@ -33,7 +33,7 @@
       schedule.Buttons.Day.innerHTML = '<i class="fa fa-line-chart"></i>';
     }
 
-    module.ajax.get('./samples/schedule.html').then(function (txt) {
+    module.ajax.get('samples/schedule.html').then(function (txt) {
       var container = module.core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(module.core.build('div', txt, false));

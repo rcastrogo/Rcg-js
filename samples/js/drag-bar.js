@@ -103,7 +103,7 @@
 
     }
 
-    module.ajax.get('./samples/drag-bar.html').then(function (txt) {
+    module.ajax.get('samples/drag-bar.html').then(function (txt) {
       container = module.core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(module.core.build('div', txt, false));

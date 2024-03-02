@@ -42,7 +42,7 @@
       container.style.height = '{0}px'.format(document.firstElementChild.clientHeight - 120);
     }
 
-    module.ajax.get('./samples/calendar.html').then(function (txt) {
+    module.ajax.get('samples/calendar.html').then(function (txt) {
       var container = module.core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(module.core.build('div', txt, false));

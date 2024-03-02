@@ -16,14 +16,14 @@
       // =================================================================
       // Cargar el informe
       // =================================================================
-      ajax.get('./samples/reports/table/sample.rpt.txt')
+      ajax.get('samples/reports/table/sample.rpt.txt')
           .then(function(txt) {
             var rpt = reports.load(txt);
             var engine = new reports.ReportEngine();
             // ===========================================================
             // Obtener los datos
             // ===========================================================
-            ajax.get('./samples/js/proveedores.json')
+            ajax.get('samples/js/proveedores.json')
                 .then(function(res){ 
                     var data = JSON.parse(res);
                     var html = engine.generateReport(rpt, data);
@@ -37,7 +37,7 @@
           });    
     }
 
-    ajax.get('./samples/reports/table/sample.html').then(function (txt) {
+    ajax.get('samples/reports/table/sample.html').then(function (txt) {
       container = core.$('main-container');
       container.innerHTML = '';
       container.appendChild(core.build('div', txt, false));

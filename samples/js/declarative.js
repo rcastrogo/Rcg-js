@@ -57,7 +57,7 @@
       pubsub.subscribe(MESSAGE.MSG_SELECT_CHANGE_01, handlers.logMessage);
     }
 
-    module.ajax.get('.//samples//declarative.html').then(function (txt) {
+    module.ajax.get('samples/declarative.html').then(function (txt) {
       var container = core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(core.build('div', txt, false));

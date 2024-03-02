@@ -157,7 +157,7 @@
     // Obtener los datos
     // ============================================================================
     function loadData(){
-      ajax.get('./samples/js/datos-colmenas-canarias.json')
+      ajax.get('samples/js/datos-colmenas-canarias.json')
           .then(function(res){ 
               data = JSON.parse(res);
               data = transform(data);
@@ -170,7 +170,7 @@
     // ============================================================================
     function loadReport(){        
       reportContainer.innerHTML = '';
-      ajax.get('./samples/reports/table/colmenas/sample.rpt.txt')
+      ajax.get('samples/reports/table/colmenas/sample.rpt.txt')
           .then(function(txt) {
             var rpt  = core.apply(reports.load(txt), context);           
             var html = engine.generateReport(rpt, data.rows);
@@ -224,7 +224,7 @@
           .then(function(){ setTimeout(w3CodeColor, 300); });
     }
 
-    ajax.get('./samples/reports/table/colmenas/sample.html').then(function (txt) {
+    ajax.get('samples/reports/table/colmenas/sample.html').then(function (txt) {
       mainContainer = core.$('main-container');
       mainContainer.innerHTML = '';
       mainContainer.appendChild(core.build('div', txt, false));

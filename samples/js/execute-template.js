@@ -17,11 +17,11 @@
           );
     }
 
-    module.ajax.get('.//samples//execute-template.html').then(function (txt) {
+    module.ajax.get('samples/execute-template.html').then(function (txt) {
       var container = module.core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(module.core.build('div', txt, false));
-      module.ajax.get('.//samples//js//template-data.json').then(function (response) {
+      module.ajax.get('samples/js/template-data.json').then(function (response) {
         init(JSON.parse(response));
       })  
     });

@@ -355,11 +355,11 @@
       });
     }
 
-    module.ajax.get('.//samples//list-view.html').then(function (txt) {
+    module.ajax.get('samples/list-view.html').then(function (txt) {
       var container = module.core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(module.core.build('div', txt, false));
-      module.core.include('.//js//list-view.js').then(init);
+      module.core.include('js/list-view.js').then(init);
     });
 
   }

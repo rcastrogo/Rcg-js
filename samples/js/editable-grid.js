@@ -89,11 +89,11 @@
 
     }
 
-    module.ajax.get('.//samples//editable-grid.html').then(function (txt) {
+    module.ajax.get('samples/editable-grid.html').then(function (txt) {
       container = module.core.$('main-container');      
       container.innerHTML = '';
       container.appendChild(module.core.build('div', txt, false));
-      module.core.include('.//js//editable-grid.js').then(init);
+      module.core.include('js/editable-grid.js').then(init);
     });
 
   }
