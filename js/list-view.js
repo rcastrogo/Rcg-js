@@ -4,7 +4,9 @@
 // =====================================================================================
 (function (module) {
 
-  var core = module.core;
+  var core   = module.core;
+  var pubsub = module.pubsub;
+  var ui     = module.ui;
 
   var defaults = {
     sorters      : [],
@@ -16,7 +18,7 @@
 
     var options = core.apply({}, o, defaults);
     var items   = [], data = [], current = {};
-    var header, tbody, tr_template, tbody;
+    var header, tbody, tr_template, tbody, header_wrapper, rows_wrapper, header_table, rows_table;
     var desc   = false, sortBy = options.sorters[1] || '';
     var paginationInfo = module.ui.paginate([], 1, 1, '');
 
@@ -25,19 +27,27 @@
       doGoToPage  : function (sender, event, name, data) { doAction({ name: 'page', data: sender.value }); },
       doSearch    : function (sender, event, name, data) { doAction({ name: 'search', data: sender.value }); },
       doSort      : function (sender, event, name, data) { doSort(options.sorters[event.target.cellIndex] || ''); },
-      checked     : function (sender, item, b) { 
-        return item.__checked ? 'checked' : ''; 
-      }
+      checked     : function (sender, item, b) { return item.__checked ? 'checked' : ''; }
     }
 
     function init(container) {
-      header = container.querySelector('[header]');
-      tbody  = container.querySelector('table tbody');
-      tr_template = container.querySelector('table tbody tr');
+      header = container.querySelector('[data-header]');
+      header_wrapper = container.querySelector('[data-header-wrapper]');
+      header_table   = header_wrapper.querySelector('table');
+      rows_wrapper   = container.querySelector('[data-rows-wrapper]');
+      rows_table     = rows_wrapper.querySelector('table');
+      tbody          = rows_table.querySelector('tbody');
+      tr_template    = tbody.querySelector('tr');
       tbody.removeChild(tr_template);
       module.ui.addEventListeners(container, sharedFunctions, {});
+      pubsub.subscribe(pubsub.TOPICS.WINDOW_RESIZE, syncColumnsHeaders);    
+      rows_wrapper.onscroll = ui.debounce(syncHeadercontainer, 70);
       return listViewControl;
     };
+
+    function syncHeadercontainer(){
+      header_wrapper.style.marginLeft = '-{0}px'.format(this.scrollLeft);
+    }
 
     function loadData(values) {
       syncTitle();
@@ -64,9 +74,10 @@
       if(paginationInfo.allItems.length){
         tbody.appendChild(tr_template.cloneNode(true));
         paginationInfo.fn = sharedFunctions;
-        module.templates.fillTemplate(tbody, paginationInfo);
+        module.templates.fillTemplate(tbody, paginationInfo, true);
         module.ui.addEventListeners(tbody, sharedFunctions, {});
       }
+      syncColumnsHeaders();
     };
 
     function syncTitle() {
@@ -80,6 +91,21 @@
         paginationInfo.title = template;
       module.templates.fillTemplate(header, paginationInfo);
     };
+
+    function syncColumnsHeaders(){
+      var firstRow = core.$('tr.js-info-row', rows_table)[0];
+      if(firstRow){
+        var width = rows_wrapper.offsetWidth - rows_wrapper.clientWidth;
+        header_table.style.width = '{0}px'.format(rows_table.clientWidth + width); 
+        var target = core.$('th', header_table);       
+        core.toArray(firstRow.cells).forEach(function(td, i){
+          if((i == target.length - 1) && scroll)
+              target[i].style.width = '{0}px'.format(td.clientWidth + width);    
+          else
+              target[i].style.width = '{0}px'.format(td.clientWidth);  
+        });
+      }
+    }
 
     function goToPageOf(target) {
       var index = items.indexOf(target);
@@ -137,7 +163,10 @@
 
       var target = checkedItems[0].item;
 
+      // TODO: Borrar de visibleItems
       data.remove(target);
+      items.remove(target);
+
       goToPage('current');
 
       //DialogHelper.getWrapper('dialog-container')        
@@ -243,13 +272,15 @@
       init      : init,
       loadData  : loadData,
       goToPage  : goToPage,
-      events    : events
+      events    : events,
+      element   : core.$(options.container)
     };
 
-    return init(core.$(options.container));
+    return init(listViewControl.element);
 
   }
 
+  module.ui = module.ui || {};
   module.ui.createListView = createListView;
 
 }(window[___ROOT_API_NAME]));

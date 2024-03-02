@@ -688,9 +688,9 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
       return false;
     };
     module.TOPICS = { 
-      WINDOW_SCROLL : 'msg:window:scroll', 
-      WINDOW_RESIZE : 'msg:window:resize',
-      VALUE_CHANGED : 'msg:value:changed'
+      WINDOW_SCROLL : 'msg//window//scroll', 
+      WINDOW_RESIZE : 'msg//window//resize',
+      VALUE_CHANGED : 'msg//value//changed'
     };
   }(module.pubsub = { }));
 
@@ -939,8 +939,9 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
           // =================================================================================
           if (index === 1) {
             var tokens = value.split(':');
-            var topic = core.getValue(tokens[0], pubsub);
-            topic = topic || tokens[0];
+            var topic = core.getValue(tokens[0], context) || 
+                        core.getValue(tokens[0], pubsub)  ||
+                        tokens[0];
             pubsub.subscribe(topic, function (message, data) {
               var fnName = tokens[1].split('(')[0];
               if (fnName) {
@@ -999,7 +1000,7 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
                             function () { return fn.apply(context, params); }, 
                             350
                           );
-            e.onblur = function () { return fn.apply(context, params); };
+            //e.onblur = function () { return fn.apply(context, params); };
           }
         });
       });

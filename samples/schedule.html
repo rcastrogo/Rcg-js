@@ -1,0 +1,40 @@
+﻿
+
+<style type="text/css">
+    #schedule-container { position:absolute; top:105px; right:0; bottom:0; left:0; }
+    .Schedule { position:relative; top:0; left:0; height:100%; right:100%; }
+    .ScheduleHeader{ position:absolute; top:0; right:0; left:0; text-align:center; padding: 0; z-index:3;border-bottom: solid 1px gray;}
+    .ScheduleButton.left{ float:left}
+    .ScheduleButton.right{ float:right;}
+    .ScheduleLabel{ display:inline-block; padding:11px;}
+    .ScheduleBody{ position:absolute; top:48px; right:5px; left:5px; bottom:0;z-index:1;}
+    .ScheduleFooter{ display:none; position:absolute; right:0; left:0; height:40px;bottom:0; padding: 5px;font-size:120%; box-sizing: border-box;font-weight: bold;  color: gray;}      
+    .ScheduleContainer{ position: absolute; top:2px; bottom:0; left:2px; right:2px; }
+
+    .ScheduleOverlay_0{ position: absolute; top:0em; bottom:0; left:5px; right:5px; }
+    .ScheduleOverlay_1{ position: absolute; top:2em; bottom:2em; left:5px; right:5px; overflow:overlay; border: solid 1px silver; }        
+    .ScheduleOverlay_0 .vline{ background-color:silver; top:2em; bottom:2em; width:1px;  position:absolute; }
+    .ScheduleOverlay_0 .label_top{ margin-left: -1.5em; Color: Gray; font-weight:bold; font-size:9px; top:.5em; position:absolute;  }
+    .ScheduleOverlay_0 .label_bottom{ margin-left: -1.5em; Color: Gray; font-weight:bold;  font-size:9px; bottom:.5em; position:absolute; }    
+    .ScheduleOverlay_1 .Schedule_i { position:absolute; height:2em; padding:.5em; border: solid 2px white; background-color:navy; color:White; border-radius: 10px; box-shadow: 2px 2px 14px gray; filter:alpha(opacity=80); opacity:0.8; box-sizing:border-box; } 
+
+    .Schedule table.Cal { width:100%; height:100%;  border-spacing:1px; table-layout:fixed;  }
+    .Schedule table.Cal td {background-color:White; width: 14.28571%; text-align:right; vertical-align:top; padding:4px 4px 0; position:relative; }
+    .Schedule table.Cal tr.Cal_header { height:2em;  }
+    .Schedule table.Cal td.Cal_header { background-color:#DFDFDF; color: gray; text-align: center; vertical-align:middle;padding:0;}
+    .Schedule table.Cal td.Cal_Day { font-size: 12px; font-family:monospace}
+    .Schedule table.Cal td.Cal_Day_Disabled {color:silver; font-size: 12px;font-family:monospace}
+    .Schedule table.Cal td div.Cal_day_con{ position:absolute; top:1.5em; bottom:.2em; left:.2em; right:.2em; overflow:auto; overflow-y:hidden; border-bottom: solid 1px silver; text-align:center}
+
+</style>
+
+<div class="w3-bar w3-black" style="position:sticky; top:0;margin-bottom: 16px;">
+    <div class="w3-container">
+        <h2 class="">Schedule</h2>
+    </div>
+</div>
+
+<div class="w3-container" id="schedule-container">
+
+
+</div>

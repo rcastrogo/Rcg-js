@@ -1,0 +1,249 @@
+﻿
+<style type="text/css">
+    div.w3-code {
+        overflow: auto;
+        background-color: transparent;
+        border:none;
+    }
+    [data-collapsible-box] button{ text-align:left; }
+
+    td.bar{ padding:1px; text-align:center}
+    div.bar{ background-color:silver; border:solid 1px gray; border-top-left-radius: 5px; border-top-right-radius: 5px}
+    div.bar-h{ background-color:silver; border:solid 1px gray; border-radius: 5px; border-radius: 5px}
+
+</style>
+
+<div class="w3-bar w3-black" style="position:sticky; top:0;margin-bottom: 16px;">
+    <div class="w3-container">
+        <h2 class="">Reports (table-info)</h2>
+        <button class="w3-bar-item w3-button tablink btn-report" onclick="openTab(this, 'report-tab')">Report</button>
+        <button class="w3-bar-item w3-button tablink btn-info" onclick="openTab(this, 'info-tab')">Info</button>
+    </div>
+</div>
+
+<div style="">
+
+    <div id="report-tab" class="w3-container tab" style="display:none">
+        <p>
+            <button class="w3-black w3-button" on-click="loadReport()">Reload report</button>
+        </p>
+        <div id="report-container"></div>
+    </div>
+
+    <div id="info-tab" class="w3-container tab" style="display:none">
+        <div id="info-container">
+
+            <p>
+                DEFINE y TEXT para la definición de variables:
+            </p>
+            <div class="w3-code"><code style="white-space:pre;">               
+                DEFINE hiddenHeaders      = 1,2
+                DEFINE hideTotal          = false
+                DEFINE hideDetail         = false
+                DEFINE repeatHeader       = 1,2
+                DEFINE repeatHeaderAfter  = 1
+                DEFINE tableId            = tbl-rpt0001
+
+                TEXT summary
+                {
+                    "valor"    : 0.0,
+                    "_max_"    : { "valor" : 0},
+                    "_min_"    : { "valor" : 5555},
+                    "_values_" : { "valor"  : []}
+                }
+                END
+            </code></div>
+
+            <p>
+                Creación de las cabeceras del informe.
+            </p>
+            <div class="w3-code"><code style="white-space:pre;">
+                    # ================================================================================================
+                    # Cabecera 1
+                    # ================================================================================================
+                    TEXT __HEADER_1
+                    &lt;h3&gt;
+                    Listado de colmenas por municipio
+                    &lt;/h3&gt;
+                    END
+
+                    CREATE header className:header
+                    ADD_COL colspan:4 html:@__HEADER_1        
+            </code></div>
+            <p>
+                Creación del total del informe.
+            </p>
+            <div class="w3-code">
+                <code style="white-space:pre;">
+                    CREATE group id:@grandTotalId className:rpt-total
+                    ADD_COL colspan:4 html:'Total Listado' style:text-align:right;font-weight:bold
+                    ADD_COL className:integer xbind:'innerHTML:BS.recordCount'
+                </code>
+            </div>
+            <p>
+                Creación de grupos.
+            </p>
+            <div class="w3-code">
+                <code style="white-space:pre;">
+                    # ================================================================================================
+                    # Grupo 1 (Municipio)
+                    # ================================================================================================
+                    DEFINE HTML_EJERCICIO = Total municipio
+                    DEFINE HTML_RESUMEN = 'Total {BS.G1.data.valor} de {BS.G1.recordCount} registros'
+                    CREATE group key:'municipio' header:'BS.fn.headerG1'
+                    ADD_COL xbind:'' xmerge:'' colspan:3 html:HTML_RESUMEN style:'text-align:right;font-weight:bold'
+                    ADD_COL xbind:'innerHTML:BS.G1.data.valor'
+
+                    # ================================================================================================
+                    # Grupo 2 (Indicador)
+                    # ================================================================================================
+                    CREATE  group className:rpt-total key:indicador header:BS.fn.headerG2
+                    ADD_COL xbind:'' xmerge:'' colspan:3 html:'Total {BS.G2.data.valor} de {BS.G2.recordCount} registros' style:text-align:right;font-weight:bold
+                    ADD_COL xbind:'innerHTML:BS.G2.data.valor'
+                </code>
+            </div>
+
+            <p>
+                Creación del detalle del informe.
+            </p>
+            <div class="w3-code">
+                <code style="white-space:pre;">
+                    CREATE  detail
+                    ADD_COL xbind:'innerHTML:BS.data.indicador'
+                    ADD_COL xbind:'innerHTML:BS.data.municipio'
+                    ADD_COL xbind:'innerHTML:BS.data.tipo'
+                    ADD_COL xbind:'innerHTML:BS.data.valor'
+
+                    DEFINE  __COL_5_INNERHTML = &lt;div class=&quot;w3-red&quot;&gt;&lt;h2 xbind xmerge&gt;{BS.data._nombre|toUpperCase} - {window.ff(@BS.data._id,A)} - {BS.data._nif:window.fff(_nombre)} &lt;/h2&gt;&lt;/div&gt;
+                    CREATE  detail id:txt-{BS.data._id} xbind:'' xmerge:''
+                    ADD_COL xbind:'innerHTML:BS.data._id' on-click:'BS.fn.sayHello(@BS.recordCount,1,2)'
+                    ADD_COL xbind:'innerHTML:BS.data._nif|toUpperCase;title:window.setTitle()'
+                    ADD_COL xbind:'innerHTML:BS.data._nombre|toUpperCase;vAlign:BS.data._nif'
+                    ADD_COL xbind:'innerHTML:BS.data._fechaDeAlta'
+                    ADD_COL xmerge:'' xbind:'' id:'txt-{BS.data._id}' html:@__COL_5_INNERHTML
+                </code>
+            </div>
+            <p>
+                Funciones utilizadas en la generación del informe.
+            </p>
+            <div class="w3-code">
+                <code class="jsHigh" style="white-space:pre;">
+
+                    function iteratefn(item, i, arr, ctx)
+
+                    end
+
+                    function onGroupFooter(sb, section, ctx)
+                        var group = ctx[section.name];
+                        group = (group &amp;&amp; group.data) || ctx.G0;
+                        sb.append(
+                        &#39;&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;El valor total es {valor}, el máximo {_max_.valor} y el mínimo {_min_.valor}&lt;/td&gt;&lt;/tr&gt;&#39;.format(group)
+                    end
+
+                    function onItemFooter(sb, section, ctx)
+                        sb.append(&#39;&lt;tr&gt;&lt;td colspan=&quot;5&quot; style=&quot;height:2px;background-color:gray&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&#39;);
+                    end
+
+                    function onRowfn(ctx)
+
+                    end
+
+                    function onRowEndfn(ctx)
+
+                    end
+
+                    function onEndfn(ctx)
+                        var core  = ctx.core;
+                        var utils = rcg.reports.js.ReportEngine.prototype;
+                        var sum   = utils.compute(ctx.bs.dataSet, &#39;_id&#39;);
+
+                        var res   = utils.compute(ctx.bs.dataSet, { _id : 0, _nif : &#39;&#39; });
+
+                        var result = {};
+                        utils.toGroupWrapper(ctx.bs.dataSet, result)
+                                            (&#39;_descripcion&#39;, &#39;_id,_nif&#39;, &#39;descripcion&#39;)
+                                            (&#39;_id&#39;, &#39;_id&#39;, &#39;identificador&#39;)
+                                            (&#39;_nif&#39;, &#39;_id&#39;, &#39;nif&#39;);
+                        console.log(sum);
+                        console.log(res);
+                        console.log(result);
+
+                        ctx.container.appendChild(
+                        core.build(&#39;pre&#39;, { className   : &#39;w3-container w3-black&#39;,
+                        textContent : JSON.stringify(res, null, 2) })
+                        );
+                    end
+
+                    function onStartfn(ctx)
+                        ctx.fn = {
+                            sayHello: function (a, b, c, d) {
+                                console.log(a,b,c,d);
+                                alert(&#39;Hola&#39;);
+                            },
+                            headerG1 : function(key, b){
+                              var label = data.municipios[key];
+                              return &#39;&lt;tr class=&quot;w3-white&quot;&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;b&gt;Municipio: &lt;/b&gt;{0}&lt;/td&gt;&lt;/tr&gt;&#39;.format(label);
+                              /*
+                                return { attributes: &#39;&#39;, text : &#39;&lt;td&gt;Hola&lt;/td&gt;&#39; };
+                                return 'hidden';
+                                return core.buil(&#39;row&#39;);
+                              */
+                            },
+                            headerG2 : function(key, b){
+                              var label = data.indicadores[key];
+                              return &#39;&lt;tr class=&quot;w3-white&quot;&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;b&gt;Indicador: &lt;/b&gt;{0}&lt;/td&gt;&lt;/tr&gt;&#39;.format(label);
+                            },
+                            fixDate : function(value, b){
+                                return value.fixDate();
+                            },
+                            fixDate2 : function(scope, sender, value, a, b, c){
+                                return &#39;- &#39; + value.fixDate();
+                            }
+                        }
+
+                        this.getContext = function () {
+                            return { BS : ctx };
+                        }
+                        // -------------------------------------------------------------------------
+                        // Totales
+                        // -------------------------------------------------------------------------
+                        ctx.__computed       = {};
+                        ctx.__computed.total = utils.compute(ctx.dataSet, &#39;valor&#39;);
+                        utils.group(ctx.dataSet, ctx.__computed)		
+                        		   (&#39;__groupId&#39;, &#39;valor&#39;)  // municipio + indicador
+                        		   (&#39;indicador&#39;, &#39;valor&#39;)  // indicador
+                        		   (&#39;municipio&#39;, &#39;valor&#39;); // municipio
+                        console.log(ctx.__computed);
+
+                    end
+                </code>
+            </div>
+
+            <p>
+                Valores devueltos por las funciones de cabecera (<code>CREATE  group key:'municipio' header:'BS.fn.headerG1'</code>) para modificar el aspecto.<br />
+                - No mostrar.<br />
+                - Añadir el texto devuelto por la función.<br />
+                - Anadir una fila a la tabla.<br />
+            </p>
+            <div class="w3-code jj">
+                <code class="jsHigh" style="white-space:pre;">                    
+                    if(g.header){
+                        var __header = core.getValue(g.header, that)(g.current, g.name);
+                        if (__header != &#39;hidden;&#39;) {
+                            if (__header.text)
+                                _sb.append(&#39;&lt;tr {0}&gt;{1}&lt;/tr&gt;&#39;.format(__header.attributes, __header.text));
+                            else if (__header.row)
+                                that.BS.reportDefinition.dom_tbody.appendChild(__header.row);
+                            else
+                                _sb.append(&#39;&lt;tr class=&quot;group-header&quot;&gt;{0}&lt;/tr&gt;&#39;.format(__header));
+                        }
+                    }
+                </code>
+            </div>
+
+        </div>
+</div>
+
+
+
+

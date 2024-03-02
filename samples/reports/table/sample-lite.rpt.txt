@@ -1,0 +1,49 @@
+
+DEFINE hiddenHeaders      = 1
+DEFINE hideTotal          = false
+DEFINE hideDetail         = false
+DEFINE repeatHeader       = 1
+DEFINE repeatHeaderAfter  = 0
+DEFINE tableId            = tbl-rpt0001
+
+# ================================================================================================
+# Cabecera 1
+# ================================================================================================ 
+CREATE  header className:report-title
+ADD_COL colspan:5 html:'<h3>Listado de proveedores</h3>'
+
+# ================================================================================================
+# Cabecera 2  
+# ================================================================================================ 
+CREATE  header className:header
+ADD_COL html:'Id' style:width:2em
+ADD_COL html:'Nif' style:width:8em
+ADD_COL html:'Nombre' 
+ADD_COL html:'Fecha de alta' style:width:10em
+ADD_COL html:'+' style:width:10em
+
+# ================================================================================================
+# Detalle
+# ================================================================================================
+DEFINE  __COL_5_INNERHTML = <div class="w3-red"><h2 xbind xmerge>{BS.data._nombre|toUpperCase} - {window.ff(@BS.data._id,A)} - {BS.data._nif:window.fff(_nombre)} </h2></div>
+CREATE  detail id:txt-{BS.data._id} xbind:'' xmerge:''
+ADD_COL xbind:'innerHTML:BS.data._id' on-click:'BS.fn.sayHello(@BS.recordCount,1,2)'
+ADD_COL xbind:'innerHTML:BS.data._nif|toUpperCase;title:window.setTitle()'
+ADD_COL xbind:'innerHTML:BS.data._nombre|toUpperCase;vAlign:BS.data._nif'
+ADD_COL xbind:'innerHTML:BS.data._fechaDeAlta'
+ADD_COL xmerge:'' xbind:'' id:'txt-{BS.data._id}' html:@__COL_5_INNERHTML
+
+# ================================================================================================
+# Grupo 1 (Marca)
+# ================================================================================================
+DEFINE  HTML_EJERCICIO = Total empresa
+CREATE  group className:rpt-total key:_descripcion header:BS.fn.headerG1
+ADD_COL colspan:4 html:@HTML_EJERCICIO style:text-align:right;font-weight:bold
+ADD_COL className:integer xbind:'innerHTML:BS.G1.recordCount'
+
+# ================================================================================================
+# Total Listado
+# ================================================================================================
+CREATE  group className:rpt-total
+ADD_COL colspan:4 html:'Total Listado' style:text-align:right;font-weight:bold
+ADD_COL className:integer xbind:'innerHTML:BS.recordCount'

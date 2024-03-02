@@ -325,29 +325,31 @@
 
   function initSample(){
 
+    var core = module.core;
+
     function init(){
       var lv = module.ui.createListView({
-                        rowsPerPage  : 6,
-                        container    : 'address-table-template',
-                        infoTemplate : 'Direcciones: {0} elementos',
-                        sorters      : [
-                          function (item) { return item.__checked == true; },
-                          'id',
-                          'address.summary',
-                          'address.province',
-                          'address.town'
-                        ],
-                        onSearch : function (item, text) {
-                          var target = item.id + ' ' +
-                                       item.address.province + ' ' +
-                                       item.address.town + ' ' +
-                                       item.address.summary;
-                          return target.toLowerCase().includes(text.toLowerCase());
-                        }
-                      })
-                      .loadData(
-                        BUILDING_DATA_SET
-                      );
+                      rowsPerPage  : 18,
+                      container    : 'address-table-template',
+                      infoTemplate : 'Direcciones: {0} elementos',
+                      sorters      : [
+                        function (item) { return item.__checked == true; },
+                        'id',
+                        'address.summary',
+                        'address.province',
+                        'address.town'
+                      ],
+                      onSearch : function (item, text) {
+                        var target = item.id + ' ' +
+                                      item.address.province + ' ' +
+                                      item.address.town + ' ' +
+                                      item.address.summary;
+                        return target.toLowerCase().includes(text.toLowerCase());
+                      }
+                    })
+                    .loadData(
+                      BUILDING_DATA_SET
+                    );
       lv.events.onInsert.add(function(){
         console.log('lv.events.onInsert');
       });

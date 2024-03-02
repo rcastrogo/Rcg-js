@@ -1,0 +1,85 @@
+<!--
+# ==========================================================================
+# Definición de variables
+# ==========================================================================-->
+<var data-name="sampleProperty" data-type="json">{}</var>
+<var data-name="summary">{}</var>
+<var data-name="orderBy" data-type="string">_descripcion,_nombre</var>
+
+<!--
+# ==========================================================================
+# Secciones de cabecera del informe
+# ==========================================================================-->
+<div data-section data-type="header" id="PageHeader1">
+    <div class="rpt-report-header">
+        <h1>Esto rula!!</h1>
+        Listados {BS.dataSet.length} Elementos {BS.fn.getReportDate}
+    </div>
+</div>
+
+<div data-section data-type="header" id="PageHeader2">
+    <div class="w3-center">
+        <div class="w3-panel w3-pale-yellow w3-border w3-round w3-display-container">
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+            <h3>Ubicación: </h3>
+            <p>{window.location}</p>
+        </div>
+    </div>
+</div>
+
+<!--
+# ==========================================================================
+# Grupo 01
+# ==========================================================================-->
+<div data-group data-key="_descripcion"
+     id="Group01_tipo"
+     data-header-Value-Providerfn2="BS.fn.header_provider_fn"
+     data-footer-Value-Providerfn="BS.fn.footer_provider_fn">
+
+    <div data-header>
+        <h2 class="rpt-header"
+            on-click="BS.fn.sayHello">
+            Grupo: {current|toUpperCase}
+        </h2>
+    </div>
+
+    <div data-footer>
+        <div>
+            <div class="rpt-footer">
+                Previo: {BS.previous._id} Actual: {BS.data._id}
+            </div>
+            <div class="rpt-footer">{current} {BS.G1.recordCount} elementos</div>
+        </div>
+    </div>
+</div>
+
+<!--
+# ==========================================================================
+# Seccion de detalle 1
+# ==========================================================================-->
+<div data-detail id="Detail1">
+    <div class="rpt-detail">
+        {BS.data._id|toFixed,2} {BS.data._nif} {BS.data._nombre|toUpperCase} {BS.data._fechaDeAlta|fixDate:BS.fn.fixDate3}
+    </div>
+</div>
+
+<!--
+# ==========================================================================
+# Seccion de detalle 2
+# ==========================================================================-->
+<div data-detail id="Detail2" data-value-Providerfn="BS.fn.d3_provider_fn"></div>
+
+<!--
+# ==========================================================================
+# Seccion de Total General
+# ==========================================================================-->
+<div data-section data-type="total" id="Total0">
+    <div style="background-color: navy; height:3px">
+    </div>
+</div>
+
+<div data-section data-type="total" id="Total1">
+    <div class="rpt-total">
+        Total proveedores listados {BS.recordCount}
+    </div>
+</div>

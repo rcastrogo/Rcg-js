@@ -1,0 +1,75 @@
+
+DEFINE hiddenHeaders      = 1,2
+DEFINE hideTotal          = false
+DEFINE hideDetail         = false
+DEFINE repeatHeader       = 1,2
+DEFINE repeatHeaderAfter  = 1
+DEFINE tableId            = tbl-rpt0001
+
+TEXT summary
+{ 
+	"valor"    : 0.0, 
+	"_max_"    : { "valor" : 0},
+	"_min_"    : { "valor" : 5555},
+	"_values_" : { "valor"  : []}
+}
+END
+
+# ================================================================================================
+# Cabecera 1
+# ================================================================================================
+TEXT __HEADER_1
+<h3>
+	Listado de colmenas por municipio
+</h3>
+END
+
+CREATE  header
+ADD_COL colspan:4 html:@__HEADER_1
+
+# ================================================================================================
+# Cabecera 2  
+# ================================================================================================ 
+CREATE  header className:header
+ADD_COL html:'Indicador' style:''
+ADD_COL html:'Municipio' style:''
+ADD_COL html:'Tipo' 
+ADD_COL html:'Valor'     style:'width:60px'
+
+# ================================================================================================
+# Cabecera 3
+# ================================================================================================ 
+CREATE  header className:''
+ADD_COL colspan:4 className:'w3-red' style:'height:3px;padding:0'
+
+# ================================================================================================
+# Detalle
+# ================================================================================================
+CREATE  detail
+ADD_COL xbind:'innerHTML:BS.data.indicador'
+ADD_COL xbind:'innerHTML:BS.data.municipio'
+ADD_COL xbind:'innerHTML:BS.data.tipo'
+ADD_COL xbind:'innerHTML:BS.data.valor'
+
+# ================================================================================================
+# Grupo 1 (Municipio)
+# ================================================================================================
+DEFINE  HTML_EJERCICIO = Total municipio
+CREATE  group key:'municipio' header:'BS.fn.headerG1' className:'resume'
+ADD_COL xbind:'innerHTML:BS.previous.municipio' style:'text-align:center'
+ADD_COL xbind:'' xmerge:'' colspan:2 html:'Total {BS.G1.data.valor} de {BS.G1.recordCount} registros' style:'text-align:center;font-weight:bold'
+ADD_COL xbind:'innerHTML:BS.G1.data.valor' style:'text-align:center'
+
+# ================================================================================================
+# Grupo 2 (Indicador)
+# ================================================================================================
+CREATE  group className:rpt-total key:indicador header:BS.fn.headerG2
+ADD_COL xbind:'' xmerge:'' colspan:3 html:'Total {BS.G2.data.valor} de {BS.G2.recordCount} registros' style:text-align:right;font-weight:bold
+ADD_COL xbind:'innerHTML:BS.G2.data.valor'
+
+# ================================================================================================
+# Total Listado
+# ================================================================================================
+CREATE  group className:rpt-total
+ADD_COL xbind:'' xmerge:'' colspan:3 html:'Total Listado {BS.recordCount} registros' style:text-align:right;font-weight:bold
+ADD_COL xbind:'innerHTML:BS.G0.valor'

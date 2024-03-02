@@ -1,70 +1,75 @@
 ﻿
+<div class="w3-bar w3-black" style="position:sticky; top:0;margin-bottom: 16px;">
+    <div class="w3-container">
+        <h2 class="">Declarative</h2>
+    </div>
+</div>
+
 <div class="w3-container">
 
-  <style type="text/css">
-    .Madrid {
-      background-color: red;
-    }
+    <style type="text/css">
+        .Madrid {
+            background-color: red;
+        }
 
-    .Buenaventura {
-      background-color: lightyellow;
-    }
-  </style>
+        .Buenaventura {
+            background-color: lightyellow;
+        }
+    </style>
 
-  <h1>Declarative</h1>
 
-  <div id="declarative-target" class="w3-example">
+    <div id="declarative-target" class="w3-example">
 
-    <input on-change="logTxt(PROVEEDOR,B)" />
-    <select on-change="logCombo(CLIENTE,A)">
-      <option value="01">Primero</option>
-      <option value="02">Segundo</option>
-    </select>
-    <input on-change="publish:MSG_INPUT_CHANGE_01" />
-    <select on-change="publish:MSG_SELECT_CHANGE_01">
-      <option value="01">Primero</option>
-      <option value="02">Segundo</option>
-    </select>
-    <div id="log-container" on-publish="ON_LOG_MESSAGE:append"></div>
+        <input on-change="logTxt(PROVEEDOR,B)" />
+        <select on-change="logCombo(CLIENTE,A)">
+            <option value="01">Primero</option>
+            <option value="02">Segundo</option>
+        </select>
+        <input on-change="publish:MSG_INPUT_CHANGE_01" />
+        <select on-change="publish:MSG_SELECT_CHANGE_01">
+            <option value="01">Primero</option>
+            <option value="02">Segundo</option>
+        </select>
+        <div id="log-container" on-publish="ON_LOG_MESSAGE:append"></div>
 
-    <div class="w3-border w3-margin-top">
-      <button on-click="expandCollapse()" class="w3-button w3-block w3-left-align">
-        <span on-publish="ON_CHANGE_MUNICIPIO:innerHTML">Buenaventura</span><i class="w3-right w3-large fa fa-caret-down"></i>
-      </button>
-      <div class="w3-hide">
-        <ul class="w3-ul">
-          <li on-click="requestData()" id="loc-45022">Buenaventura</li>
-          <li on-click="requestData()" id="loc-28079">Madrid</li>
-        </ul>
-      </div>
-    </div>
-    <h1 on-publish="ON_CHANGE_MUNICIPIO:innerHTML">innerHTML</h1>
-    <div class="w3-code htmlHigh notranslate">
-      &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:innerHTML"&gt;&lt;/h1&gt;
-    </div>
-    <h1 on-publish="ON_CHANGE_MUNICIPIO:append">append</h1>
-    <div class="w3-code htmlHigh notranslate">
-      &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:append"&gt;&lt;/h1&gt;
-    </div>
-    <h1 on-publish="ON_CHANGE_MUNICIPIO:innerText">innerText</h1>
-    <div class="w3-code htmlHigh notranslate">
-      &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:innerText"&gt;&lt;/h1&gt;
-    </div>
-    <h1 on-publish="ON_CHANGE_MUNICIPIO:className">className</h1>
-    <div class="w3-code htmlHigh notranslate">
-      &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:className"&gt;&lt;/h1&gt;
-    </div>
-    <h1 on-publish="ON_CHANGE_MUNICIPIO:toItalic(mode,1)">toItalic</h1>
-    <div class="w3-code htmlHigh notranslate">
-      &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:toItalic(mode,1)"&gt;&lt;/h1&gt;
-    </div>
+        <div class="w3-border w3-margin-top">
+            <button on-click="expandCollapse()" class="w3-button w3-block w3-left-align">
+                <span on-publish="ON_CHANGE_MUNICIPIO:innerHTML">Buenaventura</span><i class="w3-right w3-large fa fa-caret-down"></i>
+            </button>
+            <div class="w3-hide">
+                <ul class="w3-ul">
+                    <li on-click="requestData()" id="loc-45022">Buenaventura</li>
+                    <li on-click="requestData()" id="loc-28079">Madrid</li>
+                </ul>
+            </div>
+        </div>
+        <h1 on-publish="ON_CHANGE_MUNICIPIO:innerHTML">innerHTML</h1>
+        <div class="w3-code htmlHigh notranslate">
+            &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:innerHTML"&gt;&lt;/h1&gt;
+        </div>
+        <h1 on-publish="ON_CHANGE_MUNICIPIO:append">append</h1>
+        <div class="w3-code htmlHigh notranslate">
+            &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:append"&gt;&lt;/h1&gt;
+        </div>
+        <h1 on-publish="ON_CHANGE_MUNICIPIO:innerText">innerText</h1>
+        <div class="w3-code htmlHigh notranslate">
+            &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:innerText"&gt;&lt;/h1&gt;
+        </div>
+        <h1 on-publish="ON_CHANGE_MUNICIPIO:className">className</h1>
+        <div class="w3-code htmlHigh notranslate">
+            &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:className"&gt;&lt;/h1&gt;
+        </div>
+        <h1 on-publish="ON_CHANGE_MUNICIPIO:toItalic(mode,1)">toItalic</h1>
+        <div class="w3-code htmlHigh notranslate">
+            &lt;h1 on-publish="ON_CHANGE_MUNICIPIO:toItalic(mode,1)"&gt;&lt;/h1&gt;
+        </div>
 
-  </div>
+    </div>
 
     <div class="w3-example">
-      <div id="declarative-container" class="w3-border" style="">
+        <div id="declarative-container" class="w3-border" style="">
 
-      </div>
+        </div>
     </div>
 
 </div>
