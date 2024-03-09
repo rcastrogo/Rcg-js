@@ -21,35 +21,32 @@ window[___ROOT_API_NAME] = {};
     Core.prototype.isDate = function(v){return Object.prototype.toString.call(v) === '[object Date]'},
     Core.prototype.isObject = function (v) { return v && typeof v == 'object'; };
     Core.prototype.apply = function (a, b, d) {
-        if (d) core.apply(a, d);
-        if (a && b && core.isObject(b)) {
-            for (var p in b) {
-                if (core.isArray(b[p]))
-                    a[p] = core.clone(b[p]);
-                else if (core.isObject(b[p])) 
-                    core.apply(a[p] = a[p] || {}, b[p]);
-                else 
-                    a[p] = b[p];
-            }
+      if (d) core.apply(a, d);
+      if (a && b && core.isObject(b)) {
+        for (var p in b) {
+          if (core.isArray(b[p]))       a[p] = core.clone(b[p]);
+          else if (core.isObject(b[p])) core.apply(a[p] = a[p] || {}, b[p]);
+          else                          a[p] = b[p];
         }
-        return a;
+      }
+      return a;
     };   
     Core.prototype.clone = function (o) {
       if(core.isDate(o))               return new Date(o.getTime());
       if (core.isArray(o))             return o.slice(0);
       if (core.isObject(o) && o.clone) return o.clone();
       if (core.isObject(o)) {
-          return Object.keys(o).reduce(function (a, k) {
-              a[k] = core.clone(o[k]);
-              return a;
-          }, {});
+        return Object.keys(o).reduce(function (a, k) {
+            a[k] = core.clone(o[k]);
+            return a;
+        }, {});
       }
       return o;
     };
     Core.prototype.createStringBuilder = function (s) {
-        return { value: s || '', 
-                 append: function (s) { this.value = this.value + s; return this; },
-                 appendLine: function (s) { this.value = this.value + (s || '') + '\n'; return this; } };
+      return { value: s || '', 
+               append: function (s) { this.value = this.value + s; return this; },
+               appendLine: function (s) { this.value = this.value + (s || '') + '\n'; return this; } };
     };
     Core.prototype.$ = function (e, control, def) {
         var element = document.getElementById(e);
@@ -69,6 +66,16 @@ window[___ROOT_API_NAME] = {};
         var e = core.apply(document.createElement(tagName), o);
         return firstElementChild ? e.firstElementChild : e;
     };   
+    Core.prototype.wrapp = function(target){
+      var that = this;
+      return {
+        css : function(value){
+          if(arguments.length == 2)       target.style[value] = arguments[1];
+          else if(that.isObject(value))   that.apply(target.style, value);
+          return this;
+        }
+      };
+    }
     Core.prototype.parseQueryString = function () {
         return location.search
                        .slice(1)
@@ -306,7 +313,9 @@ window[___ROOT_API_NAME] = {};
     else
       return ref.tagName ? core.$(this.format.apply(this, args.slice(0,-1)), ref) : core.$(this.format.apply(this, args));
   }
-
+  String.prototype.toNumber = function(){
+    return parseFloat(this);
+  }
 }(window[___ROOT_API_NAME]));
 // ==============================================================================================================
 // Array.prototype

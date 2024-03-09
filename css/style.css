@@ -1,0 +1,56 @@
+
+/*======================================================================
+ui.dialogs
+========================================================================*/
+/*.dialog-wrapper {
+    position: absolute;
+    inset: 0;
+    display: none;
+}
+
+.dialog-header {
+    min-height: 33px;
+}
+
+.dialog-title {
+    background-color: gray;
+    color: white;
+    padding: 2px 4px;
+    margin: 0;
+    text-align: center
+}
+
+.dialog-body {
+    padding: 8px;
+    border-top: solid 1px black;
+}
+
+.dialog-close {
+    float: right;
+    margin: 2px;
+}
+
+.dialog-layer {
+    position: fixed;
+    inset: 0;
+    background-color: black;
+    opacity: .8;
+    background: black no-repeat center center;
+    background-size: 12%;
+}
+
+.dialog {
+    background-color: white;
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+    top: 10%;
+}
+
+.dialog-footer {
+    text-align: center;
+    border-top: solid 1px silver;
+    margin: 0;
+    padding: 8px 0 0 0;
+}
+*/

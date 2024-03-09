@@ -1,0 +1,90 @@
+﻿
+<div class="w3-bar w3-black" style="position:sticky; top:0;margin-bottom:0">
+    <div class="w3-container">
+        <h2 class="">Listview multiple</h2>
+    </div>
+</div>
+
+<div class="w3-container" id="address-lv-container"
+     style="padding: 0; position: absolute; width: 100%; background-color: white; bottom: 0; top: 104px;">
+
+</div>
+
+
+<div style="display:none;">
+
+    <div id="listview-ext-template">
+        <div data-header class="w3-bar w3-border-bottom " style="">
+            <button class="w3-button w3-xlarge w3-left fa fa-th-large w3-border-right;"
+                    style="padding: 7px 4px;" data-grid
+                    title="Rejilla"
+                    on-click="doAction(view, grid)"
+                    on-publish="MESSAGE_VIEW_CHANGE:syncViewButtons(grid)"></button>
+            <button class="w3-button w3-xlarge w3-left fa fa-bars w3-border-right;"
+                    style="padding: 7px 4px;" data-list
+                    title="Lista"
+                    on-click="doAction(view, list)"
+                    on-publish="MESSAGE_VIEW_CHANGE:syncViewButtons(list)"></button>
+            <button class="w3-button w3-xlarge w3-left fa fa-indent w3-border-right;"
+                    style="padding: 7px 4px;" data-groups
+                    title="Lista agrupada"
+                    on-click="doAction(view, groups)"
+                    on-publish="MESSAGE_VIEW_CHANGE:syncViewButtons(groups)"></button>
+            <span data-label data-xbind="innerHTML:title" class="w3-left" style="padding:6px 0 4px 8px;"></span>
+
+            <div data-menu-wrapper class="w3-dropdown-click w3-right">
+                <button class="w3-button w3-xlarge w3-right fa fa-caret-down w3-border-left w3-border-right"
+                        on-click="showHideMenu(show)"
+                        style="padding: 7px 4px;">
+                </button>
+                <div data-menu class="w3-dropdown-content w3-bar-block w3-right w3-card-2" style="right: 2px; margin-top: 2.6em;">
+                    <button class="w3-bar-item w3-button">Validar</button>
+                    <button class="w3-bar-item w3-button">Enviar...</button>
+                    <div style="height:1px; background-color:silver;"></div>
+                    <button class="w3-bar-item w3-button" on-click="doAction(select-all)">Seleccionar todo</button>
+                </div>
+            </div>
+
+            <button class="w3-button w3-xlarge w3-right fa fa-plus w3-border-left" style="padding: 7px 4px;" title="Insertar" on-click="doAction(new)"></button>
+            <button class="w3-button w3-xlarge w3-right fa fa-trash w3-border-left" style="padding: 7px 4px;" title="Eliminar" on-click="doAction(delete)"></button>
+            <button class="w3-button w3-xlarge w3-right fa fa-edit w3-border-left" style="padding: 9px 4px 5px 4px;" title="Editar" on-click="doAction(edit)"></button>
+            <button on-click="doAction(last)" class="w3-button w3-right w3-border-left" style="padding: 8px;">&#10095;&#10095;</button>
+            <button on-click="doAction(next)" class="w3-button w3-right w3-border-left" style="padding: 8px;">&#10095;</button>
+            <input  on-change="doGoToPage()" data-xbind="value:currentPage" class="w3-right w3-center" style="width: 3em;padding:8px; border:none" />
+            <button on-click="doAction(previous)" class="w3-button w3-right w3-border-left w3-border-right" style="padding: 8px;">&#10094;</button>
+            <button on-click="doAction(first)" class="w3-button w3-right w3-border-left" style="padding: 8px;">&#10094;&#10094;</button>
+            <div class="w3-right w3-border-left" style="margin:0; padding:0">
+                <input on-change="doSearch()" type="text" class="w3-right" style="padding:8px; border:none" placeholder="Buscar.." />
+            </div>
+        </div>
+        <div data-view style="overflow-x:auto;position:absolute; inset: 40px 0 39px 0;"></div>
+        <div style="position: absolute; height: 2px; top: 37px; left: 0; right: 0; background-color: white;">
+            <div data-progress-bar style="height:2px;width:0%; background-color:red; opacity:0.5"></div>
+        </div>
+        <div data-footer 
+             style="overflow: hidden; position: absolute; height: 38px; left: 0; right: 0; bottom: 0; background-color: whitesmoke; box-shadow: silver -3px -4px 26px 0px;padding: 8px; text-align: center;"></div>
+    </div>
+
+</div>
+
+<style type="text/css">
+
+    div.no-view {
+        padding: 8px;
+        border: solid 1px silver;
+        margin: 2px;
+    }
+
+    *[data-id] {
+        background-color: white;
+        border-radius: 10px;
+        border: solid 1px silver;
+        margin: 4px 0;
+    }
+
+    *[data-id].selected {
+        background-color: lightyellow;
+    }
+
+</style>
+
