@@ -17,7 +17,7 @@
       // =================================================================
       // Cargar el informe
       // =================================================================
-      core.include('samples/reports/js/sample.rpt.js', false)
+      core.include('samples/reports/js/sample.rpt.js', 'sample.rpt.js', false)
           .then(function() {
             var rpt = reports.lastLoaded;
             // ===========================================================

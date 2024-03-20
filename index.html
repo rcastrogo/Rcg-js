@@ -18,9 +18,22 @@
     <script type="text/javascript" src="js/dialogs.js"></script>
 
     <style type="text/css">
+        #notificationPanel {position:fixed;max-height:700px; overflow:auto; z-index:100; top:0; width: 100%; }
+        #notificationPanel div { background-color: white;margin: 6px; transition: all 1s; overflow:hidden;}
+        #notificationPanel div.msg{box-shadow: 2px 2px 5px darkgrey;}
+        #notificationPanel.sticky {top:40px; max-height:640px;}
+    </style>
+
+    <style id="dynamic-styles" type="text/css">
+
     </style>
 
     <script>
+
+        var module_api = window[___ROOT_API_NAME],
+            core       = module_api.core,
+            ui         = module_api.ui,
+            pubsub     = module_api.pubsub;
 
         var samples = {
             'list-view'                : 'samples/js/list-view.js',
@@ -40,17 +53,69 @@
             'schedule'                 : 'samples/js/schedule.js',
             'calendar'                 : 'samples/js/calendar.js',
             'drag-bar'                 : 'samples/js/drag-bar.js',
-            'dialogs'                  : 'samples/js/dialogs.js'
+            'dialogs'                  : 'samples/js/dialogs.js',
+            'code'                     : 'samples/js/code.js'
         };
 
-        function openSample(name) { rcg.core.include(samples[name], false); }
-
-        document.addEventListener("DOMContentLoaded", function () {
+        function openSample(name) { 
+            core.include(samples[name], name, false)
+                .then(function(){
+                    setTimeout(__sync, 200);
+                });
+        }
+      
+        core.ready( function () {
             openSample('list-view');
             window.addEventListener(
                 "resize",
-                rcg.ui.debounce(function () { rcg.pubsub.publish(rcg.pubsub.TOPICS.WINDOW_RESIZE); }, 100),
+                ui.debounce(function () { pubsub.publish(pubsub.TOPICS.WINDOW_RESIZE); }, 100),
                 false);
+            pubsub.subscribe(pubsub.TOPICS.WINDOW_RESIZE, __sync);
+        });
+
+        function __sync() {
+            var target = core.element('[data-resize-dependent]');
+            if (target) {
+                var top = core.element('main-container');
+                target.style.top = '{0}px'.format(top.offsetTop + 70);
+            }
+        }
+
+        core.ready(function () {
+
+            var panel = core.build('div', { id: 'notificationPanel' });
+            document.body.insertBefore(panel, core.element('main-container'))
+
+            pubsub.subscribe(pubsub.TOPICS.NOTIFICATION, function (msg, data) {
+                let template = `<div class="msg w3-container w3-border w3-round w3-animate-top">
+                                <span on-click="close" class="w3-button w3-large w3-display-right">x</span>
+                                <p style="overflow:hidden;margin-right:27px;">{message}</p>
+                              </div>`
+                let item = core.build('div', template.format(data), true);
+                panel.appendChild(item);
+                // =====================================================
+                // addEventListeners
+                // =====================================================
+                ui.addEventListeners(
+                    item,
+                    {
+                        close: target => {
+                            item.classList.remove('w3-animate-top');
+                            item.style.backgroundColor = 'gray';
+                            item.style.color = 'white';
+                            item.style.opacity = '0';
+                            item.style.transform = 'translate(0, -200px)';
+                            setTimeout(() => {
+                                if (item.parentNode) panel.removeChild(item);
+                            }, 500);
+                        }
+                    });
+                // =================================================================================
+                // Auto-close
+                // =================================================================================
+                // if(Math.random() < .6) setTimeout(() => item.firstElementChild.onclick(), 3500);
+            });
+
         });
 
     </script>
@@ -93,6 +158,7 @@
     <button class="w3-bar-item w3-button" onclick="openSample('calendar')">Calendar</button>
     <button class="w3-bar-item w3-button" onclick="openSample('drag-bar')">Dragbar</button>
     <button class="w3-bar-item w3-button" onclick="openSample('dialogs')">Dialogs</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('code')">Code</button>
   </div>
 
   <div id="main-container"></div>

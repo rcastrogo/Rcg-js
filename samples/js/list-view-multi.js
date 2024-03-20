@@ -616,14 +616,14 @@
         callback(item);
 
         ui.modals.success(
-          'Ya hay un elemento más', 
-          function(){ 
-            var layer = ui.dialogBuilder.showLayer(true);
-            setTimeout(function(){
-              layer.close(true);                           
-            }, 10000);                                
-          }
-        );
+                   'Ya hay un elemento más', 
+                   function(){ 
+                     var layer = ui.dialogBuilder.showLayer(true);
+                     setTimeout(function(){
+                       layer.close(true);                           
+                     }, 10000);                                
+                   }
+                 ).show();
 
       });
       lv.events.onDelete.add(function(sender, eventArgs){
@@ -633,15 +633,17 @@
 
         var message = '¿Estás seguro de borrar los elementos seleccionados?';
         var title   = 'Eliminar direcciones';
-        ui.modals.confirm(message, title, 
-                          function(dlg) {
-                            callback('ok');
-                            //return false;
-                          }, 
-                          function(dlg){
-                            callback();
-                            //return false;
-                          });
+        ui.modals.confirm(
+                    message, title, 
+                    function(dlg) {
+                      callback('ok');
+                      //return false;
+                    }, 
+                    function(dlg){
+                      callback();
+                      //return false;
+                    })
+                 .show();
                
       });
 
@@ -665,14 +667,14 @@
           return 'Elemento';
         }
 
-        function init(sender){
+        function configure(sender){
           dlg = sender
           dlg.btnAccept.disabled = false;
           dlg.btnAccept.onclick = accept;
         }
 
-        modals.createDialog('Datos de la dirección', createContent, cancel)
-              .init(init)
+        modals.createDialog('Datos de la dirección', createContent, cancel, ['Grabar', 'Cerrar'])
+              .configure(configure)
               .show();
       });
 

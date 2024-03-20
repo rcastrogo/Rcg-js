@@ -20,6 +20,35 @@
 
     <div id="declarative-target" class="w3-example">
 
+        <h3>HTMLX</h3>
+        <p>
+            Cómo cargar contenido por AJAX de forma declarativa
+        </p>
+        <div class="w3-border w3-padding w3-margin"
+             on-get="samples/resources/header.html"
+             on-get-mode="delay:500"
+             on-get-resolve="append">
+            Espere un segundo..... Se va a añadir contenido
+        </div>
+        <div class="w3-border w3-padding w3-margin"
+             on-get="samples/resources/header.html"
+             on-get-mode="delay:5000"
+             on-get-resolve="html">
+            Espere 5 segundos.....
+        </div>
+        <div class="w3-border w3-padding w3-margin"
+             on-get="samples/resources/header.html"
+             on-get-resolve="text"
+             on-get-target="#get-target">
+            Click to load text
+            <pre id="get-target"></pre>
+        </div>
+
+        <h3>on-change, on-click, on-publish</h3>
+        <p>
+            Cómo mapear acciones de forma declarativa.
+        </p>
+
         <input on-change="logTxt(PROVEEDOR,B)" />
         <select on-change="logCombo(CLIENTE,A)">
             <option value="01">Primero</option>

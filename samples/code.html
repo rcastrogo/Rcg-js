@@ -1,0 +1,110 @@
+﻿
+
+<style type="text/css">
+    .drag-container { display: flex; height:100% }
+    .drag-left { width: 220px; border:solid 1px silver; overflow:auto; padding:2px; min-width:50px;}
+    .drag-right { flex: 1; width: 60%; border:solid 1px silver; overflow:auto; padding:8px;min-width:50px; position:relative}
+    .drag-bar { padding: 4px; cursor: col-resize; background-color: transparent; }
+
+    #dragbar-container {
+        position: absolute;
+        top: 109px;
+        bottom: 6px;
+        left: 6px;
+        right: 6px;
+        padding: 0;
+    }
+
+    .drag-container li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .drag-container li.folder {
+        font-weight:bold;
+        background-color:silver;
+    }
+
+    .drag-container li[on-click] {
+        cursor: pointer;
+    }
+
+
+</style>
+
+<div class="w3-bar w3-black" style="position:sticky; top:0;margin-bottom: 16px;z-index:6">
+    <div class="w3-container">
+        <h2 class="">Code</h2>
+    </div>
+</div>
+
+<div class="w3-container" data-resize-dependent id="dragbar-container">
+
+    <ul class="w3-ul w3-small">
+
+        <li class="folder">js</li>
+        <li on-click="showfile(js/)">calendar.js</li>
+        <li on-click="showfile(js/)">collapsible-box.js</li>
+        <li on-click="showfile(js/)">dialogs.js</li>
+        <li on-click="showfile(js/)">editable-grid.js</li>
+        <li on-click="showfile(js/)">list-view-ext.js</li>
+        <li on-click="showfile(js/)">list-view.js</li>
+        <li on-click="showfile(js/)">rcg-js.js</li>
+        <li on-click="showfile(js/)">schedule.js</li>
+        <li on-click="showfile(js/)">text-viewer.js</li>
+
+        <li class="folder">js/reports</li>
+        <li on-click="showfile(js/reports/)">engine.js</li>
+        <li on-click="showfile(js/reports/)">loader.js</li>
+
+        <li class="folder">js/reports/js</li>
+        <li on-click="showfile(js/reports/js/)">engine.js</li>
+        <li on-click="showfile(js/reports/js/)">loader.js</li>
+
+        <li class="folder">samples/js</li>
+        <li on-click="showfile(samples/js/)">calendar.js</li>
+        <li on-click="showfile(samples/js/)">code.js</li>
+        <li on-click="showfile(samples/js/)">debounce.js</li>
+        <li on-click="showfile(samples/js/)">declarative.js</li>
+        <li on-click="showfile(samples/js/)">dialogs.js</li>
+        <li on-click="showfile(samples/js/)">drag-bar.js</li>
+        <li on-click="showfile(samples/js/)">editable-grid.js</li>
+        <li on-click="showfile(samples/js/)">execute-template.js</li>
+        <li on-click="showfile(samples/js/)">fill-template.js</li>
+        <li on-click="showfile(samples/js/)">list-view-multi.js</li>
+        <li on-click="showfile(samples/js/)">list-view.js</li>
+        <li on-click="showfile(samples/js/)">merge.js</li>
+        <li on-click="showfile(samples/js/)">schedule.js</li>
+
+        <li class="folder">samples/reports/html</li>
+        <li on-click="showfile(samples/reports/html/)">sample.js</li>
+        <li on-click="showfile(samples/reports/html/)">sample.rpt.html</li>
+
+        <li class="folder">samples/reports/js</li>
+        <li on-click="showfile(samples/reports/js/)">sample.js</li>
+        <li on-click="showfile(samples/reports/js/)">sample.rpt.js</li>
+
+        <li class="folder">samples/reports/table</li>
+        <li on-click="showfile(samples/reports/table/)">sample.js</li>
+        <li on-click="showfile(samples/reports/table/)">sample.rpt.txt</li>
+        <li on-click="showfile(samples/reports/table/)">sample-lite.js</li>
+        <li on-click="showfile(samples/reports/table/)">sample-lite.rpt.txt</li>
+
+        <li class="folder">samples/reports/table/colmenas</li>
+        <li on-click="showfile(samples/reports/table/colmenas/)">sample.js</li>
+        <li on-click="showfile(samples/reports/table/colmenas/)">sample.rpt.txt</li>
+
+        <li class="folder">samples/reports/txt</li>
+        <li on-click="showfile(samples/reports/txt/)">sample.js</li>
+        <li on-click="showfile(samples/reports/txt/)">sample.rpt.txt</li>
+
+    </ul>
+
+</div>
+
+<div style="display:none">
+    <div id="font-buttons">
+        <button on-click="changeFont(up)" class="w3-button w3-small fa fa-plus w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px 20px 0 0;"></button>
+        <button on-click="changeFont(down)" class="w3-button w3-small fa fa-minus w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px;"></button>
+    </div>
+</div>

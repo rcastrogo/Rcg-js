@@ -65,6 +65,10 @@
 // ==============================================================================================================
 (function (module) {
 
+  var core     = module.core,
+      ui       = module.ui,
+      events   = module.events;
+
   var styles = 'data:text/css;base64,ICAgIC5kaWFsb2ctd3JhcHBlciB7CiAgICAgICAgcG9zaXRpb246IGFic29sdXRlOwogICAgICAgI' + 
                'Gluc2V0OiAwOwogICAgICAgIGRpc3BsYXk6bm9uZTsKICAgIH0KICAgIC5kaWFsb2ctaGVhZGVyIHsKICAgICAgICBtaW4taGV' + 
                'pZ2h0OiAzM3B4OwogICAgfQoKICAgIC5kaWFsb2ctdGl0bGUgewogICAgICAgIGJhY2tncm91bmQtY29sb3I6IGdyYXk7CiAgI' + 
@@ -77,22 +81,26 @@
                'TIlOyAKICAgIH0KICAgIC5kaWFsb2cgewogICAgICAgIGJhY2tncm91bmQtY29sb3I6IHdoaXRlOwogICAgICAgIHBvc2l0aW9' + 
                'uOiByZWxhdGl2ZTsKICAgICAgICB3aWR0aDogNTAlOwogICAgICAgIG1hcmdpbjogMCBhdXRvOwogICAgICAgIHRvcDogMTAlO' + 
                'wogICAgfQogICAgLmRpYWxvZy1mb290ZXIgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgICBib3JkZXItdG9' + 
-               'wOiBzb2xpZCAxcHggc2lsdmVyOwogICAgICAgIG1hcmdpbjogMDsKICAgICAgICBwYWRkaW5nOiA4cHggMCAwIDA7CiAgICB9';
+               'wOiBzb2xpZCAxcHggc2lsdmVyOwogICAgICAgIG1hcmdpbjogMDsKICAgICAgICBwYWRkaW5nOiA4cHggMCAwIDA7CiAgICB9' +
+               'LmRpYWxvZy1mb290ZXIgYnV0dG9ueyBtYXJnaW4tcmlnaHQ6NnB4OyB9Ci5kaWFsb2ctZm9vdGVyIGJ1dHRvbjpsYXN0LWNoaW' +
+               'xkIHsgbWFyZ2luLXJpZ2h0OiAwOyB9';
 
   function loadStyles(){
-    if(styles){
+    var pending = core.$('link')
+                      .where({ id : 'css-dialog'})
+                      .length == 0;
+    if(pending){
       core.element("head")
           .appendChild(
-            core.build('link', { rel : 'stylesheet', href : styles } )
+            core.build('link', { rel  : 'stylesheet', 
+                                 id   : 'css-dialog', 
+                                 href : styles } )
           ); 
-      styles = '';
     }
   }
 
-  var core     = module.core,
-      ui       = module.ui,
-      events   = module.events,
-      TEMPLATE = '<div class="dialog-wrapper">' + 
+
+  var TEMPLATE = '<div class="dialog-wrapper">' + 
                  '  <div class="dialog-layer" style="z-index:10001"></div>' +
                  '  <div class="dialog" style="z-index:10002">' +
                  '    <div class="dialog-header">' +
@@ -131,7 +139,7 @@
           show     : function() {
             loadStyles();
             var previous = that.stack.lastItem();
-            if(previous == target) return;
+            if(previous == target) return this;
             if(previous) {
               previous.layer.style.opacity = '0';
             }
@@ -167,9 +175,8 @@
              this.dialog.style.zIndex = ~~his.layer.style.zIndex + 1; 
             return this; 
           },
-          find : function(selector) {
-            return core.$(selector, element);
-          }
+          find       : function(selector) {return core.$(selector, element); },
+          configure  : function(fn){ fn(this); return this; }
         };
         target.onclose = new events.Event(target);
         target.btnClose.onclick = function(){ target.close(true); };
@@ -206,7 +213,7 @@
       ui     = module.ui,
       modals = ui.modals = {};
 
-  modals.confirm = function(message, title, onagree, onreject){
+  modals.confirm = function(message, title, onagree, onreject, buttons){
     var TEMPLATE = '<div body-content><p>{0}</p></div>' +
                    '<p class="dialog-footer">' +
                    '   <button btn-accept class="w3-button w3-teal" type="button">Aceptar</button>' +
@@ -218,8 +225,10 @@
       dlg.title.classList.add('w3-teal');
       dlg.title.textContent = title || '';
       dlg.body.innerHTML = TEMPLATE.format(message);
-      dlg.show();
-      dlg.find('[btn-accept]')[0].onclick = function(){
+      var targets = dlg.find('.dialog-footer button');
+      if(buttons && buttons[0]) targets[0].innerHTML =  buttons[0];
+      if(buttons && buttons[1]) targets[1].innerHTML =  buttons[1];
+      targets[0].onclick = function(){
         dlg.dialogResult = true;
         var result = undefined;
         if(onagree) result = onagree(dlg);
@@ -228,7 +237,7 @@
           dlg.close(true, true); 
         }
       };
-      dlg.find('[btn-cancel]')[0].onclick = function(){ 
+      targets[1].onclick = function(){ 
         dlg.dialogResult = false;
         dlg.close(true); 
       };
@@ -252,35 +261,62 @@
         dlg.header.style.display = 'none'
       }
       dlg.body.innerHTML = TEMPLATE.format(message);
-      dlg.show();
       dlg.find('[btn-accept]')[0].onclick = function(){ dlg.close(true); };
       dlg.onclose.add(function(sender, args){
         if(onclose) args.result = onclose(sender);
       });
+      dlg.footer      = dlg.body.querySelector('.dialog-footer');
+      dlg.bodyContent = core.element('[body-content]', dlg.body);
     });
   }
   
-  modals.createDialog = function(title, content, onclose){
-    var dlg = modals.alert('innerHTML', title || '', onclose);
+  var resolved = {};
+
+  modals.createDialog = function(title, content, onclose, buttons){
+    var dlg = modals.alert('', title || '', onclose);
     dlg.btnClose.style.visibility = 'visible';
-    var container = core.element('[body-content]', dlg.body);
     if(core.isFunction(content)) content = content();
-    if(core.isString(content))   
-      container.innerHTML = content
+    if(content && content.id){
+      var element = resolved[content.id] || core.element(content.id);
+      if(element){
+        if(!resolved[content.id]) resolved[content.id] = element;
+        dlg.bodyContent.innerHTML = '';
+        dlg.bodyContent.appendChild(element);
+      }
+    }
+    else if(core.isString(content)){
+      dlg.bodyContent.innerHTML = content;
+    }
     else if(content && content.tagName){
-      container.innerHTML = '';
-      container.appendChild(content);
+      dlg.bodyContent.innerHTML = '';
+      dlg.bodyContent.appendChild(content);
     }
     else if(content && core.isArray(content)){
-      container.innerHTML = '';
-      content.forEach(function(node){ container.appendChild(node); });
+      dlg.bodyContent.innerHTML = '';
+      content.forEach(function(node){ dlg.bodyContent.appendChild(node); });
     }
-    dlg.btnAccept = dlg.find('[btn-accept]')[0];
-    dlg.btnAccept.onclick = function(){};
-    dlg.btnAccept.disabled = true;
-    dlg.init = function(fn){
-      fn(dlg);
-      return dlg
+    var targets = dlg.find('.dialog-footer button');      
+    if(buttons && buttons.length){
+      dlg.btnAccept          = targets[0];
+      dlg.btnAccept.onclick  = function(){};
+      dlg.btnAccept.disabled = true;
+      var btn    = buttons.shift(1);
+      var target = targets.shift(1);
+      while(btn != undefined){
+        if(target && btn)
+          target.innerHTML = btn;
+        else if(btn != '')
+          dlg.footer
+             .appendChild(
+               core.build(
+                 'div', 
+                 '<button btn-{0|toUpperCase|replaceAll, ,-} class="w3-button w3-teal" type="button">{0}</button>'.format(btn),
+                 true
+               )
+             );
+        btn    = buttons.shift(1);
+        target = targets.shift(1);
+      }
     }
     return dlg;
   }
@@ -289,5 +325,9 @@
   modals.success = function(message, onclose){ return modals.alert(message, 'Mesaje', onclose, 'w3-green'); };
   modals.warning = function(message, onclose){ return modals.alert(message, 'Aviso', onclose, 'w3-yellow'); }
   modals.error   = function(message, onclose){ return modals.alert(message, 'Error', onclose, 'w3-red'); };
+
+  core.ready(function(){
+    console.log('ui.modals.configure');
+  });
 
 }(window[___ROOT_API_NAME]));

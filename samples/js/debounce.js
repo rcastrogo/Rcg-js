@@ -16,7 +16,7 @@
       }
       txtSearch.addEventListener('keyup', ui.debounce(log, 350), false);
 
-      core.include('js/text-viewer.js', false)
+      core.include('js/text-viewer.js', 'js-text-viewer', false)
           .then(function(){ 
               var container = core.$('viewer-container');
               var viewer    = ui.createTextViewer('hola');              

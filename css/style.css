@@ -53,4 +53,6 @@ ui.dialogs
     margin: 0;
     padding: 8px 0 0 0;
 }
+.dialog-footer button{ margin-right:6px; }
+.dialog-footer button:last-child { margin-right: 0; }
 */

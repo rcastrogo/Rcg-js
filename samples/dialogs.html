@@ -20,13 +20,79 @@
 
     <h2>Confirm</h2>
     <p>
-        <button on-click="confirm()" class="w3-button w3-black">Show dialog</button>
+        <button on-click="confirm()" class="w3-button w3-black">Show</button>
     </p>
-</div>
+    <h2>ShowDialog</h2>
+    <p>
+        <button on-click="showDialog(string)" class="w3-button w3-black">Show (string)</button>
+        <button on-click="showDialog(element)" class="w3-button w3-black">Show (DOM Element)</button>
+        <button on-click="showDialog(nodes)" class="w3-button w3-black">Show (Nodes)</button>
+        <button on-click="showDialog(id,form1)" class="w3-button w3-black">Show (id)</button>
+    </p>
+    <h2>Layer</h2>
+    <p>
+        <button on-click="showLayer(progress)" class="w3-button w3-black">Show loading</button>
+        <button on-click="showLayer(none)" class="w3-button w3-black">Show</button>
+    </p>
 
+    <div class="" id="html-code-container" style="position:relative">
+        <button on-click="changeFont(up)" class="w3-button w3-small fa fa-plus w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px 20px 0 0;"></button>
+        <button on-click="changeFont(down)" class="w3-button w3-small fa fa-minus w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px;"></button>
+        <button on-click="changeFont(fixed)" class="w3-button w3-small fa fa-window-maximize  w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px;"></button>
+    </div>
+
+    <div class="" id="source-code-container" style="position:relative">
+        <button on-click="changeFont(up)" class="w3-button w3-small fa fa-plus w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px 20px 0 0;"></button>
+        <button on-click="changeFont(down)" class="w3-button w3-small fa fa-minus w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px;"></button>
+        <button on-click="changeFont(fixed)" class="w3-button w3-small fa fa-window-maximize  w3-blue-gray w3-round-large" style="z-index: 10; position: relative; float: right; margin: 6px; margin-right: 0px;"></button>
+    </div>
+
+    <p>
+
+    </p>
+
+</div>
 
 <div style="display:none;">
+    <form id="form1" class="w3-container">
+        <br>
+        <p>
+            <label class="w3-text-grey">Name</label>
+            <input class="w3-input w3-border" type="text" required="">
+        </p>
+        <p>
+            <label class="w3-text-grey">Email</label>
+            <input class="w3-input w3-border" type="text" required="">
+        </p>
+        <p>
+            <label class="w3-text-grey">Subject</label>
+            <textarea class="w3-input w3-border" style="resize:none"></textarea>
+        </p>
+        <br>
+        <div class="w3-row">
+            <div class="w3-half">
+                <input id="milk" class="w3-check" type="checkbox" checked="checked">
+                <label>Milk</label>
+                <br>
+                <input id="sugar" class="w3-check" type="checkbox">
+                <label>Sugar</label>
+                <br>
+                <input id="lemon" class="w3-check" type="checkbox" disabled="">
+                <label>Lemon (Disabled)</label>
+                <br><br>
+            </div>
 
+            <div class="w3-half">
+                <input id="male" class="w3-radio" type="radio" name="gender" value="male" checked="">
+                <label>Male</label>
+                <br>
+                <input id="female" class="w3-radio" type="radio" name="gender" value="female">
+                <label>Female</label>
+                <br>
+                <input id="unknown" class="w3-radio" type="radio" name="gender" value="" disabled="">
+                <label>Don't know (Disabled)</label>
+            </div>
+        </div>
+    </form>
 </div>
-
 

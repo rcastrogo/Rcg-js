@@ -70,6 +70,7 @@ window[___ROOT_API_NAME] = {};
       var that = this;
       return {
         css : function(value){
+          if(arguments.length == 3)       target.style.setProperty(value, arguments[1], arguments[2]); 
           if(arguments.length == 2)       target.style[value] = arguments[1];
           else if(that.isObject(value))   that.apply(target.style, value);
           return this;
@@ -90,8 +91,17 @@ window[___ROOT_API_NAME] = {};
           localStorage.setItem('{0}.{1}'.format(name, key), value);
           return this;
         },
-        read: function (key) {
-          return localStorage.getItem('{0}.{1}'.format(name, key));
+        read: function (key, def) {
+          return localStorage.getItem('{0}.{1}'.format(name, key)) || def;
+        },
+        readAll : function(){
+          var r = name + '.';
+          return Object.keys(localStorage)
+                       .where(function(k) { return k.indexOf(r) == 0; })
+                       .reduce(function(o, k){
+                         o[k.replace(r,'')] = localStorage[k]; 
+                         return o;
+                       },{});
         }
       };
     };
@@ -255,6 +265,12 @@ window[___ROOT_API_NAME] = {};
                       var val  = core.getValue(name, o);
                       return a.append(val); 
                    }, base || []);
+    }
+    Core.prototype.ready = function(fn){
+      if (document.readyState != 'loading') 
+        fn();
+      else
+        document.addEventListener('DOMContentLoaded', fn, { once: true });  
     }
 
 }(window[___ROOT_API_NAME]));
@@ -697,6 +713,7 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
       return false;
     };
     module.TOPICS = { 
+      NOTIFICATION  : 'msg//app//mesage',
       WINDOW_SCROLL : 'msg//window//scroll', 
       WINDOW_RESIZE : 'msg//window//resize',
       VALUE_CHANGED : 'msg//value//changed'
@@ -708,8 +725,9 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
 // core.include
 // =========================================================================
 (function(module){ 
+  var counter = 0;
   var includes = [];
-  module.core.include = function(url, preserve){
+  module.core.include = function(url, id, preserve){
     return new Promise( function(resolve){
       function __resolve() {
         if(preserve === undefined || preserve) includes.push(url.toLowerCase());
@@ -720,6 +738,10 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
         return;
       }
       var script = module.core.build('script', { type : 'text/javascript' })
+      if(id)
+        script.id = id;
+      else
+        script.id = 'dynamic-{0}'.format(++counter);  
       if (script.readyState){  
         script.onreadystatechange = function(){
           if(script.readyState=='loaded'||script.readyState=='complete'){
@@ -729,7 +751,8 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
         };
       } else{ script.onload = function(){ __resolve(); };}
       script.src = url;
-      document.getElementsByTagName("head")[0].appendChild(script);   
+      document.getElementsByTagName("head")[0].appendChild(script);
+      document.getElementsByTagName("head")[0].appendChild(document.createTextNode('\n'));
     });
   }
 }(window[___ROOT_API_NAME]));
@@ -910,9 +933,10 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
 // ui.addEventListeners
 // ==========================================================================
 (function (module) {
-  var core   = module.core;
-  var pubsub = module.pubsub;
-  var EVENTS = ['[on-click]', '[on-publish]', '[route-link]', '[on-change]'];
+  var core   = module.core,
+      ajax   = module.ajax,
+      pubsub = module.pubsub,
+      EVENTS = ['[on-click]', '[on-publish]', '[route-link]', '[on-change]', '[on-get]'];
   var _fn = {
       innerHTML: function (e, value, mode) { return e.innerHTML = value; },
       innerText: function (e, value, mode) { return e.innerText = value; },
@@ -1011,6 +1035,33 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
                           );
             //e.onblur = function () { return fn.apply(context, params); };
           }
+          // ===================================================================
+          // [on-get]
+          // ===================================================================
+          if (index === 4){
+            (function(){  
+              var url = value, att = e.attributes;
+              var t = att.getNamedItem('on-get-target')  || '';
+              var m = att.getNamedItem('on-get-mode')    || { value : 'click' };
+              var r = att.getNamedItem('on-get-resolve') || { value : 'html' };
+              t = t ? document.body.querySelector(t.value) : e;
+              function resolve(res){
+                if(r.value === 'text') 
+                  t.textContent = res;
+                else if(r.value === 'append') 
+                  t.appendChild(core.build('div', res));
+                else t.innerHTML = res;
+                (m && m.value === 'click') && (t.onclick = function(){});
+              }
+              function getResource(){ 
+                ajax.get(url).then(resolve); 
+              }              
+              if(m && m.value.slice(0,5) === 'delay'){ // delay:1500
+                setTimeout(getResource, ~~m.value.slice(6));
+              } else
+                e.onclick = getResource;              
+            }());
+         }
         });
       });
   }

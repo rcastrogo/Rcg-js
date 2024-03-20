@@ -18,14 +18,17 @@
                  '  <pre class="scv_TextContainer" id="svc_{0}_code"></pre>' +
                  '</div>';
 
-  var css = false;
   function initCss() {
-    if (css) return;
-    document.querySelector('head')
-            .appendChild(core.build('link', { rel: 'stylesheet',
-                                              type: 'text/css',
-                                              href: data_Uri }));
-    css = true;
+    var pending = core.$('link')
+                      .where({ id : 'css-text-viewer'})
+                      .length == 0;
+    if(pending){
+      document.querySelector('head')
+              .appendChild(core.build('link', { rel  : 'stylesheet',
+                                                id   : 'css-text-viewer',
+                                                type : 'text/css',
+                                                href : data_Uri }));
+    }
   }
 
   var TextViewer = (function () {

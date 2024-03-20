@@ -220,7 +220,7 @@
           });
 
 
-      core.include('https://www.w3schools.com/lib/w3codecolor.js')
+      core.include('js/w3codecolor.js')
           .then(function(){ setTimeout(w3CodeColor, 300); });
     }
 
