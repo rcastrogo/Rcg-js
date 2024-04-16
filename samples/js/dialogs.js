@@ -127,7 +127,7 @@
         var element = viewer.getControl();
         var main    = core.element('.scv_Main', element);
         main.classList.add('w3-code');          
-        core.wrapp(main)
+        core.wrap(main)
             .css('borderTop', 'solid 1px silver')
             .css('borderBottom', 'solid 1px silver')
             .css('borderRight', 'solid 1px silver')

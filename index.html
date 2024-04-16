@@ -54,7 +54,8 @@
             'calendar'                 : 'samples/js/calendar.js',
             'drag-bar'                 : 'samples/js/drag-bar.js',
             'dialogs'                  : 'samples/js/dialogs.js',
-            'code'                     : 'samples/js/code.js'
+            'code'                     : 'samples/js/code.js',
+            'controls'                 : 'samples/js/controls.js'
         };
 
         function openSample(name) { 
@@ -86,12 +87,12 @@
             var panel = core.build('div', { id: 'notificationPanel' });
             document.body.insertBefore(panel, core.element('main-container'))
 
-            pubsub.subscribe(pubsub.TOPICS.NOTIFICATION, function (msg, data) {
+            pubsub.subscribe(pubsub.TOPICS.NOTIFICATION, function (topic, message) {
                 let template = `<div class="msg w3-container w3-border w3-round w3-animate-top">
                                 <span on-click="close" class="w3-button w3-large w3-display-right">x</span>
-                                <p style="overflow:hidden;margin-right:27px;">{message}</p>
+                                <p style="overflow:hidden;margin-right:27px;">{0}</p>
                               </div>`
-                let item = core.build('div', template.format(data), true);
+                let item = core.build('div', template.format(message), true);
                 panel.appendChild(item);
                 // =====================================================
                 // addEventListeners
@@ -116,6 +117,7 @@
                 // if(Math.random() < .6) setTimeout(() => item.firstElementChild.onclick(), 3500);
             });
 
+            //pubsub.publish(pubsub.TOPICS.NOTIFICATION, 'Aplicación inicializada');
         });
 
     </script>
@@ -159,6 +161,7 @@
     <button class="w3-bar-item w3-button" onclick="openSample('drag-bar')">Dragbar</button>
     <button class="w3-bar-item w3-button" onclick="openSample('dialogs')">Dialogs</button>
     <button class="w3-bar-item w3-button" onclick="openSample('code')">Code</button>
+    <button class="w3-bar-item w3-button" onclick="openSample('controls')">Controls</button>
   </div>
 
   <div id="main-container"></div>

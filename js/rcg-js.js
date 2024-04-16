@@ -24,9 +24,13 @@ window[___ROOT_API_NAME] = {};
       if (d) core.apply(a, d);
       if (a && b && core.isObject(b)) {
         for (var p in b) {
-          if (core.isArray(b[p]))       a[p] = core.clone(b[p]);
-          else if (core.isObject(b[p])) core.apply(a[p] = a[p] || {}, b[p]);
-          else                          a[p] = b[p];
+          var val = b[p];
+          if (core.isArray(val)) a[p] = core.clone(val);
+          else if(val instanceof Date  || 
+                  core.isFunction(val) ||
+                  val.dataset instanceof DOMStringMap) a[p] = val;
+          else if (core.isObject(val)) core.apply(a[p] = a[p] || {}, val);
+          else a[p] = val;
         }
       }
       return a;
@@ -66,7 +70,7 @@ window[___ROOT_API_NAME] = {};
         var e = core.apply(document.createElement(tagName), o);
         return firstElementChild ? e.firstElementChild : e;
     };   
-    Core.prototype.wrapp = function(target){
+    Core.prototype.wrap  = function(target){
       var that = this;
       return {
         css : function(value){
@@ -74,6 +78,14 @@ window[___ROOT_API_NAME] = {};
           if(arguments.length == 2)       target.style[value] = arguments[1];
           else if(that.isObject(value))   that.apply(target.style, value);
           return this;
+        },
+        clear : function() { 
+          that.innerHTML = ''; 
+          return that
+        },
+        remove : function(child) { 
+          child ? that.removeChild(child) : that.parentNode.removeChild(that); 
+          return that;
         }
       };
     }
@@ -271,7 +283,7 @@ window[___ROOT_API_NAME] = {};
         fn();
       else
         document.addEventListener('DOMContentLoaded', fn, { once: true });  
-    }
+    }         
 
 }(window[___ROOT_API_NAME]));
 // ==============================================================================================================
@@ -331,6 +343,12 @@ window[___ROOT_API_NAME] = {};
   }
   String.prototype.toNumber = function(){
     return parseFloat(this);
+  }
+  String.prototype.toDate   = function(){
+    if(this.length == 0) return null;
+    if(this.trim().length == 0) return null;
+    var tokens = this.split(' ')[0].split('/');
+    return new Date(~~tokens[2], ~~tokens[1] - 1, ~~tokens[0]);
   }
 }(window[___ROOT_API_NAME]));
 // ==============================================================================================================
@@ -788,17 +806,59 @@ NamedNodeMap.prototype.toArray = function () { return Array.from ? Array.from(th
           xml.send(params);        
         });
       },
-      postJson : function(url, params, interceptor) {
+      postJson : function(url, payload, interceptor) {
         return new Promise( function(resolve, reject){
           var xml = module.ajax.createXMLHttpRequest();
           xml.open('POST', url, true);
           xml.onreadystatechange = function(){ if (xml.readyState == 4) resolve(xml.responseText) };
           xml.setRequestHeader('Content-type', 'application/json; charset=utf-8');
           xml.onerror = function(e) { reject(e); };
-          xml.send(params);
+          xml.send(payload);
         });
       },
-      createXMLHttpRequest : function(){ return new XMLHttpRequest(); }
+      createXMLHttpRequest : function(){ return new XMLHttpRequest(); },
+      formToJSON : function(form){
+        var temp = {};
+        return form.querySelectorAll('input, textarea, select')
+                   .toArray()
+                   .reduce(function(acc, e){
+                     if(e.type && e.type == 'button') return acc;
+                     if(e.name || e.id){
+                       var name = e.name || e.id;
+                       if(e.type && e.type == 'radio'){
+                         if(e.checked) acc[name] = e.id || e.value;
+                         if(e.id && e.id != name) acc[e.id] = e.checked;
+                       }
+                       else if(e.type && e.type == 'checkbox'){
+                         if(e.checked){
+                           var val = e.value == 'on' ? e.id : e.value;
+                           if(name in acc){
+                             acc[name] = core.isArray(acc[name]) ? acc[name].append(val) 
+                                                                 : [temp[name], val];
+                           } 
+                           else {
+                             temp[name] = val;
+                             acc[name] = true; 
+                           }
+                         }
+                         if(e.id && e.id != name) acc[e.id] = e.checked;
+                       } else {
+                         acc[name] = e.value;  
+                       }
+                     }
+                     return acc;                    
+                   }, {});
+        },
+      formToQuery : function(form){
+        return Object.entries(this.formToJSON(form))
+                      .reduce(function (s, e){
+                        var k = e[0],
+                            v = e[1],
+                            v = core.isArray(v) ? v.join(',') : v;
+                        return s.append('{0}={1}'.format(k, encodeURIComponent(v))); 
+                      }, [])
+                      .join('&');
+      }
     });  
 }(window[___ROOT_API_NAME]));
 // =======================================================================================

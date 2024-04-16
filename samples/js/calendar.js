@@ -15,11 +15,15 @@
       var container = core.$('calendar-container');
       var meses = [];
       var year  = new Date().getFullYear();
-      var date = new Date();
+
       while(meses.length < 12){       
-        date = new Date(year, meses.length, 1);
-        var calendar = ui.createCalendar(date);
-        calendar.onDateChange.add(function(sender, arg){
+        var options = { 
+          selectedDay    : new Date(year, meses.length, 1), 
+          showSeparators : true,
+          handleTab      : true
+        };
+        var calendar = ui.createCalendar(options);
+        calendar.ondateChange.add(function(sender, arg){
           console.log(sender, arg);
         });
         meses.push(calendar);

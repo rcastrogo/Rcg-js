@@ -1,0 +1,245 @@
+﻿
+<style type="text/css">
+
+    .rcg-list {overflow: auto;height: 250px;padding: 2px;}
+    .rcg-list li {cursor : pointer;outline:none;border:solid 1px transparent;margin: 1px 0;}
+    .rcg-list li.selected{background-color:DodgerBlue !important;}
+    .rcg-list li:focus{border:solid 1px black;}
+    .rcg-list li:hover{background-color: #e9e9e9;}
+
+    .cal-wrapper { width :100%; border:solid 1px gray; padding:8px; font-size:12px; position:relative; }
+    .cal-wrapper div, .cal-wrapper td {text-align:center;vertical-align:middle;}
+    .cal-header { }
+    .cal-body{ padding:4px; }
+    .cal-overlay-0 { }
+    .cal-overlay-1{ position:absolute;left:0;bottom:0;top:0;right:0;display:none;flex-wrap:wrap;justify-content:center; overflow:auto }
+    .cal-overlay-1 button.cal-month{ margin: 2%; width: 29%; overflow: hidden; text-overflow:ellipsis; cursor:pointer; }
+    .cal-overlay-1 button.cal-year{ margin: 1%; width: 22%; overflow: hidden; text-overflow:ellipsis; cursor:pointer; }
+    .cal-footer { border-top: solid 1px gray;padding-top:8px;}
+    .cal-prev, .cal-next{ width : 1%; padding:4px 8px; border: solid 1px gray; border-radius: 5px; cursor:pointer;}
+    .cal-label{ padding:4px; cursor:pointer;}
+    .cal-table { width:100%; height:100%;  border-spacing:1px; table-layout:fixed; position:relative}
+    .cal-table td {background-color:White; width: 14.28571%; vertical-align:top; padding:2px; position:relative; }
+    .cal-table td.cal-day {color:black; cursor:pointer;}
+
+    .cal-table td.cal-day.active{border-radius: 4px; background-color: silver; }
+    .cal-table td.cal-day:hover{border-radius: 4px; background-color: Highlight; color:white;}
+    .cal-table td.current {border-radius: 4px; background-color: Highlight; color:white; }
+    .cal-overlay-1 button.current { font-weight : bold; }
+    .cal-table td.cal-day-disabled {color:silver; visibility:visible;}
+    .cal-row-header th{ background-color:transparent }
+    .cal-line td{background-color:silver;height:1px; padding:0}
+    .cal-txt-panel{position: absolute;left: 0;top:0;width:200px;display:none;background-color: white;}
+    .cal-txt-panel .cal-footer {display : none;}
+
+    .autocomplete {position: relative;display: inline-block;}
+    .autocomplete-items {position: absolute;border: 1px solid #d4d4d4;top: calc(100% + 2px);left: 0;right: 0;max-height:200px;overflow-y:auto;overflow-x:hidden;background-color: white;z-index:1 }
+    .autocomplete-items div {padding: 10px;cursor: pointer;border-bottom: 1px solid #d4d4d4;overflow:hidden;text-overflow:ellipsis;}
+    .autocomplete-items div:last-of-type {border-bottom: none;}
+    .autocomplete-items div:hover {background-color: #e9e9e9; }
+    .autocomplete-active {background-color: DodgerBlue !important; color: #ffffff; }
+
+    .autocomplete.combo-box::after {
+        border-bottom: 2px solid rgb(0 0 0 / 75%);
+        border-right: 2px solid rgb(0 0 0 / 75%);
+        content: "";
+        display: block;
+        height: 12px;
+        pointer-events: none;
+        position: absolute;
+        right: 16px;
+        top: calc(100% - 22px);
+        transform: translate(0, -7%) rotate(45deg);
+        width: 12px;
+        cursor:pointer;
+    }
+    .autocomplete.combo-box.open::after {
+        top: calc(100% - 16px);
+        transform: translate(0, -7%) rotate(225deg);
+    }
+    .combo-box:focus {
+        
+    }
+
+</style>
+
+<div class="w3-bar w3-black" style="position:sticky; top:0;margin-bottom: 16px;">
+    <div class="w3-container">
+        <h2 class=""> Controls</h2>
+    </div>
+</div>
+
+<div class="w3-container">
+
+<style type="text/css" >
+    fieldset { border: none }
+    .m-b-xs { display: block; }
+</style>
+
+
+    <div id="declarative-target" class="">
+        <div class="w3-container" id="date-time-container">
+            <h2>Date control</h2>
+            <label for="txt-date">Fecha</label>
+            <input class="js-date-control" type="text" autocomplete="off" id="txt-date" style="width: 100px;" />
+            <label for="txt-date-2">Fecha</label>
+            <input class="js-date-control" type="text" autocomplete="off" id="txt-date-2" style="width: 100px;" />
+        </div>
+ 
+        <div class="w3-container" id="combo-box-container">
+            <h2>ComboBox control</h2>
+
+            <label for="cmb-proveedores">Proveedores: </label>
+            <input type="text" readonly="readonly" class="combo-box" id="cmb-proveedores" 
+                   style="width:450px; display:inline-block;cursor:pointer" />
+            <input type="hidden" id="cmb-proveedores-value" value="555" />
+
+            <label for="cmb-nombres">Nombres: </label>
+            <input type="text" readonly="readonly" class="combo-box" id="cmb-nombres" style="width:450px; 
+                   display:inline-block;cursor:pointer" 
+                   value="El cincuenta y cinco" />
+
+        </div>
+
+        <div class="w3-container" id="autocomplete-container">
+            <h2>Autocomplete control</h2>
+            <label for="txt-autocomplete">Dirección(ajax) : </label><input id="txt-autocomplete" type="text" autocomplete="off" style="width:250px" value="Rafael" />
+            <label for="txt-autocomplete2">Tecnologías(array): </label><input id="txt-autocomplete2" type="text" autocomplete="off" style="width:150px" value="ez" />
+            <label for="txt-autocomplete3">Correo(function): </label><input id="txt-autocomplete3" type="text" autocomplete="off" style="width:150px" value="ez" />
+        </div>
+
+        <div class="w3-container" id="list-container">
+            <h2>List control</h2>            
+        </div>
+
+        <h3>Form</h3>
+        <form method="GET" action="" id="survey-form" name="survey-form" class="w3-container w3-border w3-padding">
+            <button id="btnSend" type="button" class="w3-button w3-gray w3-block">Enviar</button>
+            <fieldset>
+                <label for="name" id="name-label">
+                    Name
+                    <input class="w3-input" type="text" id="txtName" placeholder="Enter your name (required)" />
+                </label>
+            </fieldset>
+            <fieldset>
+                <label for="email" id="email-label">
+                    Email
+                    <input class="w3-input" type="email" name="txtEmail" placeholder="Enter your email (required)" />
+                </label>
+            </fieldset>
+            <fieldset>
+                <label for="number" id="number-label">
+                    Age *
+                    <input class="w3-input" type="number" id="txtNumber" name="txtNumber" min="8" max="112" placeholder="Enter you age (required)" />
+                </label>
+            </fieldset>
+            <fieldset>
+                <label for="dropdown">
+                    Which option best describes your current role? *
+                    <select id="cmbTipo" name="cmbTipo" class="m-t-xs">
+                        <option value="student" selected>Student</option>
+                        <option value="ftLob">Full Time Job</option>
+                        <option value="ftLearner">Full Time Learner</option>
+                        <option value="notSaying">Prefer not to say</option>
+                        <option value="other">Other</option>
+                    </select>
+                </label>
+            </fieldset>
+            <fieldset>
+                <div class="labels">
+                    How likely is that you would recommend freeCodeCamp to a friend? *
+                </div>
+                <label class="m-b-xs">
+                    <input type="radio" name="radio1" value="definitely" checked /> Definitely
+                </label>
+                <label class="m-b-xs">
+                    <input type="radio" name="radio1" id="optMaybe" value="maybe" /> Maybe
+                </label>
+                <label class="m-b-xs">
+                    <input type="radio" name="radio1" value="notSure" /> Not sure
+                </label>
+            </fieldset>
+            <fieldset>
+                <label for="survey-form-like">
+                    What do you like most in FCC:
+                    <select id="cmbTipoDos" name="cmbTipoDos" class="m-t-xs">
+                        <option value="challenges" selected>Challenges</option>
+                        <option value="projects">Projects</option>
+                        <option value="community">Community</option>
+                        <option value="openSource">Open Source</option>
+                    </select>
+                </label>
+            </fieldset>
+            <fieldset>
+                <div class="labels">
+                    Things that should be improved in the future (Check all that apply):
+                </div>
+                <label for="survey-form-improve1" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" id="checkbox1">
+                    Front-end Projects
+                </label>
+                <label for="survey-form-improve2" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" id="checkbox2" value="beProjects">
+                    Back-end Projects
+                </label>
+                <label for="survey-form-improve3" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" id="checkbox3" value="dataVisualization">
+                    Data Visualization
+                </label>
+                <label for="survey-form-improve4" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" id="checkbox4" value="challenges">
+                    Challenges
+                </label>
+                <label for="survey-form-improve5" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" id="checkbox5" value="openSources">
+                    Open Source Community
+                </label>
+                <label for="survey-form-improve6" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" id="checkbox6" value="gitter">
+                    Gitter help rooms
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <div class="labels">
+                    Things that should be improved in the future (Check all that apply):
+                </div>
+                <label for="survey-form-improve1" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" name="group" id="checkbox100">
+                    Front-end Projects
+                </label>
+                <label for="survey-form-improve2" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" name="group" id="checkbox200">
+                    Back-end Projects
+                </label>
+                <label for="survey-form-improve3" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" name="group" id="checkbox300" value="Trescientos">
+                    checkbox 300
+                </label>
+                <label for="survey-form-improve4" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" name="group" id="checkbox400">
+                    Challenges
+                </label>
+                <label for="survey-form-improve5" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" name="group" id="checkbox500">
+                    Open Source Community
+                </label>
+                <label for="survey-form-improve6" class="m-b-xs">
+                    <input type="checkbox" class="w3-check" name="group" id="checkbox600">
+                    Gitter help rooms
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <label for="survey-form-suggestions">
+                    Any Comments or Suggestions?
+                    <textarea id="" txtSuggestions" maxlength="194"></textarea>
+                </label>
+            </fieldset>
+        </form>
+
+
+    </div>
+
+
+</div>

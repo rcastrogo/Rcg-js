@@ -548,7 +548,7 @@
         // =================================================================================
         // 3 - Cómo establecer el estilo del contenedor de elemetos
         // =================================================================================
-        core.wrapp(listView.view)
+        core.wrap(listView.view)
             .css({ border : 'none'})
             .css('backgroundColor', 'whiteSmoke')
             .css('borderTop', 'none');

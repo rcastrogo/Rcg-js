@@ -95,7 +95,7 @@
         var element = viewer.getControl();
         var main    = core.element('.scv_Main', element);
         if(ext != 'txt') main.classList.add('w3-code');          
-        core.wrapp(main)
+        core.wrap(main)
             .css('border', 'none')
             .css('fontSize', config.read('font-size', '13px'))
             .css('margin', '0', 'important');  
