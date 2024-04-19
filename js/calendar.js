@@ -550,6 +550,7 @@
   module.ui = module.ui || {};
   module.ui.createCalendar = create;
   module.ui.attachCalendar = attachCalendar();
+  module.ui.monthsNames = MonthsNames;
 
 })(window[___ROOT_API_NAME]);
 

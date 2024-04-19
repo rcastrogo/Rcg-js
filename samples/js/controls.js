@@ -17,7 +17,7 @@
   function initSample(){
 
     function initTextBoxes(){
-      ui.attachCalendar('.js-date-control');     
+      ui.attachCalendar('.js-date-control'); 
     }
 
     function init(){
@@ -85,7 +85,7 @@
           });
       
       core.include('js/calendar.js', 'calendar')
-          .then(initTextBoxes); 
+          .then(initTextBoxes);
     }
 
     module.ajax.get('samples/controls.html').then(function (txt) {

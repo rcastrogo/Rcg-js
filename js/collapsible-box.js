@@ -11,7 +11,7 @@
 
   var template = 
       '<div id="collapsible-box-{0}" class="w3-border" data-collapsible-box>' +
-      '  <button class="w3-block w3-border-0" style="outline-style:none">' +
+      '  <button class="w3-block w3-border-0" style="6outline-style:none">' +
       '     {1}<i style="margin: 2px;" class="fa fa-chevron-down w3-right"></i>' +
       '  </button>' +
       '  <div class="w3-hide w3-border-top" style="overflow:auto"></div>' +
@@ -28,7 +28,7 @@
         var that = this;
         that.loaded    = false;
         that.collapsed = true;
-        that.onexpand  = new events.Event('CollapsibleBox.onexpand');
+        that.onexpand  = new events.Event(that);
 
         that.control = core.build('div', { innerHTML: template.format(++counter, titulo) }, true);
         that.id      = that.control.id;
